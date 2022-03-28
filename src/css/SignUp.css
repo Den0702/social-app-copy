@@ -1,0 +1,14 @@
+section {
+    width: 100%;
+}
+
+.signup-form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+input {
+    width: 100%;
+    background-color: aliceblue;
+}
+

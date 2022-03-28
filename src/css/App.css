@@ -1,0 +1,22 @@
+/********* Sitewide ***********/
+.App {
+    text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/*Bo ja tak rozumiem, w kazdy z komponentow bedzie sie skladal z jednej sekcji  */
+section {
+    margin: 25px 0;
+}
+
+
