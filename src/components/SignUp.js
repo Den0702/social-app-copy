@@ -57,17 +57,17 @@ class SignUp extends Component {
         const arrFromPasswd = Array.from(this.state.passwd);
         let passwdCorrect = false;
 
-        if (!(this.state.login.classList.contains('error'))
-            && this.state.login.value.trim().length < 4) {
+        if ( !(this.state.login.classList.contains('error'))
+            && this.state.login.value.trim().length < 4 ) {
             errors.innerHTML += `Za krótka nazwa użytkownika<br/>`;
 
         }
-        if (!(this.state.email.classList.contains('error'))
-            && this.state.email.value.trim().includes('@') === false) {
+        if ( !(this.state.email.classList.contains('error'))
+            && !this.state.email.value.trim().includes('@') ) {
             errors.innerHTML += `Niepoprawny adres email<br/>`;
         }
 
-        if (!(this.state.password.classList.contains('error'))) {
+        if ( !(this.state.passwd.classList.contains('error')) ) {
             for (const char of arrFromPasswd) {
                 if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
                     continue;
