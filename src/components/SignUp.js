@@ -16,25 +16,25 @@ class SignUp extends Component {
 
     saveUserLogin = (e) => {
         this.setState({
-            login: e.target
+            login: e.target.value
         })
     }
     
     saveUserMail = (e) => {
         this.setState({
-            email: e.target
+            email: e.target.value
         })
     }
 
     saveUserPasswd = (e) => {
         this.setState({
-            passwd: e.target
+            passwd: e.target.value
         })
     }
 
     saveCPasswd = (e) => {
         this.setState({
-            cpasswd: e.target
+            cpasswd: e.target.value
         })
     }
 
@@ -44,40 +44,44 @@ class SignUp extends Component {
         const formFields = this._formElem.getElementsByTagName('input');
         const allFilled = true;
 
-        let errors = this._divErrors;
-        errors.innerHTML = '';//czyscimy ekran od wczesnie wypisanych bledow
+        let errors = this._errorsList;
+        errors.innerHTML = '';//czyscimy ekran od wczesniej wypisanych bledow
 
         for (const field of formFields) {
             if (field.value.trim() === '') {
                 errors.innerHTML += `Pole nie może być puste<br/>`;
                 field.classList.add('error');
+            } else if (field.classList.contains('error')) {
+                field.classList.remove('error');
             }
         }
 
         const arrFromPasswd = Array.from(this.state.passwd);
         let passwdCorrect = false;
 
-        if ( !(this.state.login.classList.contains('error'))
-            && this.state.login.value.trim().length < 4 ) {
+        if ( this.state.login !== ''
+            && this.state.login.trim().length < 4 ) {
             errors.innerHTML += `Za krótka nazwa użytkownika<br/>`;
 
         }
-        if ( !(this.state.email.classList.contains('error'))
-            && !this.state.email.value.trim().includes('@') ) {
+        if ( this.state.email !== ''
+            && !this.state.email.trim().includes('@') ) {
             errors.innerHTML += `Niepoprawny adres email<br/>`;
         }
 
-        if ( !(this.state.passwd.classList.contains('error')) ) {
-            for (const char of arrFromPasswd) {
-                if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
-                    continue;
-                } else {
-                    passwdCorrect = true;
-                    return;
+        if (this.state.passwd !== '') {
+            if (this.state.passwd.length < 6) {
+                for (const char of arrFromPasswd) {
+                    if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
+                        continue;
+                    } else {
+                        passwdCorrect = true;
+                        return;
+                    }
                 }
-            }
-            if (!passwdCorrect) {
-                errors.innerHTML += `Niewystarczająco mocne hasło!<br/>`;
+                if (!passwdCorrect) {
+                    errors.innerHTML += `Niewystarczająco mocne hasło!<br/>`;
+                }
             }
         }
 
@@ -109,7 +113,7 @@ class SignUp extends Component {
 
                         <button type="submit">Zarejestruj się</button>
                 
-                        <div ref={elem => this._divErrors = elem} className="errors"></div>
+                        <div ref={elem => this._errorsList = elem} className="errors"></div>
                 </form>
             </section>
         );

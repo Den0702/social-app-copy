@@ -7,8 +7,11 @@ section {
     flex-wrap: wrap;
 }
 
-input {
+.input-item {
     width: 100%;
     background-color: aliceblue;
 }
 
+.error {
+    border-bottom: 1.7px solid red;
+}
