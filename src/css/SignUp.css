@@ -1,17 +1,22 @@
-section {
-    width: 100%;
-}
-
 .signup-form {
-    display: flex;
-    flex-wrap: wrap;
+    text-align: left;
+    padding: 80px 40px;
+    background-color: #1ba4ce;
 }
+/* Nie działa
+label {
+    text-align: left;
+} */
 
 .input-item {
     width: 100%;
-    background-color: aliceblue;
+    border: 1.5px solid white;
+    background-color: #1ba4ce;
+    padding: 3px 7px;
+    margin: 6px 0 6px;
 }
 
 .error {
     border-bottom: 1.7px solid red;
 }
+

@@ -1,4 +1,4 @@
-/* Base styles */
+/****** Base styles ********/
 * {
     box-sizing: border-box;
 }
@@ -18,3 +18,23 @@ code {
 }
 
 /********** Utilities **************/
+.btn {
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.btn-submit {
+    display: block;
+    margin: auto;
+    background-color: #fff;
+    color: #30383b;
+    /* #473452 */    
+}
+
+.btn-submit:hover {
+    background-color: #30383b;
+    color: #fff;
+    transition: all .3s;
+}
+
+/* @media all and (sc) */

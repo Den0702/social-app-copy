@@ -16,7 +16,10 @@
 
 /*Bo ja tak rozumiem, w kazdy z komponentow bedzie sie skladal z jednej sekcji  */
 section {
-    margin: 25px 0;
+    width: 100%;
+    padding: 25px 0;
 }
+
+
 
 

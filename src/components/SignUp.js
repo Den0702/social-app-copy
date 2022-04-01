@@ -1,119 +1,141 @@
 import React, { Component } from "react";
 import '../css/SignUp.css';
+import axios from 'axios';
 
 class SignUp extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
             login: '',
+            loginError: '',
             email: '',
+            emailError: '',
             passwd: '',
-            cpasswd: '', 
+            passwdError: '',
+            cpasswd: '',
+            cpasswdError: ''
         }
     }
 
-    saveUserLogin = (e) => {
-        this.setState({
-            login: e.target.value
-        })
-    }
-    
-    saveUserMail = (e) => {
-        this.setState({
-            email: e.target.value
+    handleUserLogin = (e) => {
+        this.setState(() => {
+            return { login: e.target.value }
         })
     }
 
-    saveUserPasswd = (e) => {
-        this.setState({
-            passwd: e.target.value
+    handleUserEmail = (e) => {
+        this.setState(() => {
+            return { email: e.target.value }
         })
     }
 
-    saveCPasswd = (e) => {
-        this.setState({
-            cpasswd: e.target.value
+    handleUserPasswd = (e) => {
+        this.setState(() => {
+            return { passwd: e.target.value }
+        })
+    }
+
+    handleConfirmPasswd = (e) => {
+        this.setState(() => {
+            return { cpasswd: e.target.value }
         })
     }
 
     validateForm = (event) => {
         event.preventDefault();
 
-        const formFields = this._formElem.getElementsByTagName('input');
-        const allFilled = true;
-
         let errors = this._errorsList;
-        errors.innerHTML = '';//czyscimy ekran od wczesniej wypisanych bledow
 
-        for (const field of formFields) {
-            if (field.value.trim() === '') {
-                errors.innerHTML += `Pole nie może być puste<br/>`;
-                field.classList.add('error');
-            } else if (field.classList.contains('error')) {
-                field.classList.remove('error');
-            }
+        this.setState((currentState) => {
+            if (currentState.login !== ''
+                && currentState.login.trim().length < 4) {
+                    return { loginError: 'Za krótka nazwa użytkownika' }
+            });
         }
-
-        const arrFromPasswd = Array.from(this.state.passwd);
-        let passwdCorrect = false;
-
-        if ( this.state.login !== ''
-            && this.state.login.trim().length < 4 ) {
-            errors.innerHTML += `Za krótka nazwa użytkownika<br/>`;
-
-        }
-        if ( this.state.email !== ''
-            && !this.state.email.trim().includes('@') ) {
-            errors.innerHTML += `Niepoprawny adres email<br/>`;
+        if (this.state.email !== ''
+            && !this.state.email.trim().includes('@')) {
+            this.setState(() => {
+                return { loginError: 'Niepoprawny adres email' }
+            });
         }
 
         if (this.state.passwd !== '') {
-            if (this.state.passwd.length < 6) {
+            const arrFromPasswd = Array.from(this.state.passwd);
+            let passwdCorrect = false;
+
+            if (this.state.passwd.length >= 6) {
                 for (const char of arrFromPasswd) {
                     if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
                         continue;
                     } else {
                         passwdCorrect = true;
-                        return;
+                        break;
                     }
                 }
-                if (!passwdCorrect) {
-                    errors.innerHTML += `Niewystarczająco mocne hasło!<br/>`;
-                }
+            } 
+            if (!passwdCorrect) {
+                errors.innerHTML += `Niewystarczająco mocne hasło!<br/>`;
             }
         }
 
+        if (errors.childElementCount === 0) {
+            this.signUserUp();
+        }
     }
 
+    signUserUp = () => {
+        console.log('signUserUp()');
+
+        const userData = {
+            username: this.state.login,
+            password: this.state.passwd,
+            email: this.state.email
+        }
+
+        const axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        axios.post('https://akademia108.pl/api/social-app/user/signup',
+            JSON.stringify(userData),
+            axiosConfig)
+            .then(res => console.log("RESPONSE RECEIVED", res)
+
+            )
+            .catch(err => console.log("AXIOS ERROR", err));
+    }
 
     render() {
         console.log(this.state);
 
         return (
-            <section >
-                <form 
+            <section className="sign-up">
+                <form
                     className="signup-form"
-                    ref={elem => this._formElem = elem} 
-                    action="" 
+                    ref={elem => this._formElem = elem}
+                    action=""
                     onSubmit={this.validateForm}
                 >
-                        <label htmlFor="login">Nazwa użytkownika</label>
-                        <input onChange={this.saveUserLogin} type="text" id="login" className="input-item" />
+                    <label htmlFor="login" className={this.state.loginError !== '' ? 'error' : '' }>Nazwa użytkownika</label>
+                    <input onChange={this.handleUserLogin} type="text" id="login" className="input-item" />
 
-                        <label htmlFor="email">Adres email</label>
-                        <input onChange = {this.saveUserMail} type="text" id="email" className="input-item"/>
+                    <label htmlFor="email">Adres email</label>
+                    <input onChange={this.handleUserEmail} type="email" id="email" className="input-item" />
 
-                        <label htmlFor="passwd">Hasło</label>
-                        <input onChange = {this.saveUserPasswd} type="text" id="passwd" className="input-item"/>
+                    <label htmlFor="passwd">Hasło</label>
+                    <input onChange={this.handleUserPasswd} type="password" id="passwd" className="input-item" />
 
-                        <label htmlFor="confirm-passwd">Potwierdzenie hasła</label>
-                        <input onChange = {this.saveCPasswd} type="text" id="confirm-passwd" className="input-item"/>
+                    <label htmlFor="confirm-passwd">Potwierdzenie hasła</label>
+                    <input onChange={this.handleConfirmPasswd} type="password" id="confirm-passwd" className="input-item" />
 
-                        <button type="submit">Zarejestruj się</button>
-                
-                        <div ref={elem => this._errorsList = elem} className="errors"></div>
+                    <button type="submit" className="btn btn-submit">Zarejestruj się</button>
+
+                    <div ref={elem => this._errorsList = elem} className="errors"></div>
                 </form>
             </section>
         );

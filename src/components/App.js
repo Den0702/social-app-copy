@@ -14,7 +14,7 @@ class App extends Component {
             <div className="App">
                 <header className="App-header">
                 </header>
-                <SignUp validateForm={this.validateForm} />
+                <SignUp />
             </div>
         );
     }
