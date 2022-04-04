@@ -14,8 +14,8 @@ class SignUp extends Component {
             emailError: '',
             passwd: '',
             passwdError: '',
-            cpasswd: '',
-            cpasswdError: ''
+            confirmPasswd: '',
+            confirmPasswdError: ''
         }
     }
 
@@ -39,51 +39,137 @@ class SignUp extends Component {
 
     handleConfirmPasswd = (e) => {
         this.setState(() => {
-            return { cpasswd: e.target.value }
+            return { confirmPasswd: e.target.value }
         })
     }
 
     validateForm = (event) => {
         event.preventDefault();
 
-        let errors = this._errorsList;
+        this.setState((currentState) => {
+            if (!currentState.login) {
+                return { loginError: 'Podaj nazwę użytkownika' }
+
+            } else if (currentState.login.trim().length < 4) {
+                return { loginError: 'Nazwa użytkownika powinna się składać z minimum 4 symboli' }
+            }
+            else {
+                currentState.loginError = ''; //czyscimy error po przeładowaniu
+            }
+        });
 
         this.setState((currentState) => {
-            if (currentState.login !== ''
-                && currentState.login.trim().length < 4) {
-                    return { loginError: 'Za krótka nazwa użytkownika' }
-            });
-        }
-        if (this.state.email !== ''
-            && !this.state.email.trim().includes('@')) {
-            this.setState(() => {
-                return { loginError: 'Niepoprawny adres email' }
-            });
-        }
+            if (!currentState.email) {
+                return { emailError: 'Podaj adres email' }
 
-        if (this.state.passwd !== '') {
-            const arrFromPasswd = Array.from(this.state.passwd);
-            let passwdCorrect = false;
+            } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(currentState.email.trim())) {
+                return { emailError: 'Niepoprawny adres email' }
+            }
+            else {
+                currentState.emailError = '';
+            }
+        });
 
-            if (this.state.passwd.length >= 6) {
-                for (const char of arrFromPasswd) {
-                    if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
-                        continue;
-                    } else {
-                        passwdCorrect = true;
-                        break;
+        this.setState((currentState) => {
+            currentState.passwdError = '';
+
+            //dorobić w sprawdzeniu hasła, czy składa się ono z co najmniej 1 cyfry
+            if (currentState['passwd'] !== '') {
+                const arrFromPasswd = Array.from(currentState['passwd']);
+                let passwdCorrect = false;
+
+                if (arrFromPasswd.length >= 6) {
+                    for (const char of arrFromPasswd) {
+                        if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
+                            continue;
+                        } else {
+                            passwdCorrect = true;
+                            break;//zeby nie wykonywac niepotrzebnych iteracji
+                        }
                     }
+                    if (!passwdCorrect) {
+                        return { passwdError: 'Niewystarczająco mocne hasło! (musi zawierać !, #, @, $ lub %)' }
+                    }
+                } else {
+                    return {passwdError: 'Hasło jest za krótkie! (min 6 znaków)'}
                 }
-            } 
-            if (!passwdCorrect) {
-                errors.innerHTML += `Niewystarczająco mocne hasło!<br/>`;
+
+            } else {
+                return { passwdError: 'Podaj hasło!' }
+            }
+        })
+
+        this.setState((currentState) => {
+            
+            if (!currentState.confirmPasswd) {
+                return { confirmPasswdError: 'Potwierdź hasło!' }
+                
+            } else if (currentState.passwd !== currentState.confirmPasswd 
+                        && !currentState.passwdError) {
+                return { confirmPasswdError: 'Podane hasła się nie zgadzają!' }
+                
+            } else {
+                return {confirmPasswdError: ''}
+            }
+        })    
+        
+        /* this.areDataOk(); */
+    }
+
+    componentDidUpdate() {
+        let dataReadyToBeSent = false;
+        let inputs = [];
+        let nonEmptyInputsCount = 0;
+        let errors = [];
+        let nonEmptyErrorsCount = 0;
+
+        for (const [key, value] of Object.entries(this.state)) {
+            if (key.includes('Error')) {
+                errors.push(value);
+            } else {
+                inputs.push(value);
             }
         }
+        
+        inputs.forEach(input => {
+            //jezeli input nie jest pusty
+            if (input) {
+               nonEmptyInputsCount++;
+            } 
+        });
+        
+        if(nonEmptyInputsCount === inputs.length) {
+            dataReadyToBeSent = true;
+        }
 
-        if (errors.childElementCount === 0) {
+        errors.forEach(error => {
+            //jezeli error nie jest pusty (zawiera komunikat błędu)
+            if (error) {
+                nonEmptyErrorsCount++;
+            }
+        })
+        if(nonEmptyErrorsCount === errors.length) {
+            dataReadyToBeSent = false;
+        }
+
+        if (dataReadyToBeSent) {
             this.signUserUp();
         }
     }
+
+ /*    componentDidUpdate() {
+        if (this.state.login &&
+            this.state.email &&
+            this.state.passwd &&
+            this.state.confirmPasswd &&
+            !this.state.loginError &&
+            !this.state.emailError &&
+            !this.state.passwdError &&
+            !this.state.confirmPasswdError
+        ) {
+            this.signUserUp();
+        }
+    } */
 
     signUserUp = () => {
         console.log('signUserUp()');
@@ -101,18 +187,15 @@ class SignUp extends Component {
             }
         };
 
-        axios.post('https://akademia108.pl/api/social-app/user/signup',
+        axios.post(
+            'https://akademia108.pl/api/social-app/user/signup',
             JSON.stringify(userData),
             axiosConfig)
-            .then(res => console.log("RESPONSE RECEIVED", res)
-
-            )
-            .catch(err => console.log("AXIOS ERROR", err));
+            .then(res => console.log("RESPONSE RECEIVED", res))
+            .catch(err => console.log("AXIOS ERROR", err))
     }
 
     render() {
-        console.log(this.state);
-
         return (
             <section className="sign-up">
                 <form
@@ -121,21 +204,41 @@ class SignUp extends Component {
                     action=""
                     onSubmit={this.validateForm}
                 >
-                    <label htmlFor="login" className={this.state.loginError !== '' ? 'error' : '' }>Nazwa użytkownika</label>
-                    <input onChange={this.handleUserLogin} type="text" id="login" className="input-item" />
+                    <label htmlFor="login" className={this.state.loginError ? 'error' : ''}>Nazwa użytkownika</label>
+                    <input
+                        onChange={this.handleUserLogin}
+                        type="text" id="login"
+                        className={`input-item ${this.state.loginError ? 'error' : ''}`}
+                    />
 
-                    <label htmlFor="email">Adres email</label>
-                    <input onChange={this.handleUserEmail} type="email" id="email" className="input-item" />
+                    <label htmlFor="email" className={this.state.emailError ? 'error' : ''}>Adres email</label>
+                    <input
+                        onChange={this.handleUserEmail}
+                        type="email"
+                        id="email"
+                        className={`input-item ${this.state.emailError ? 'error' : ''}`}
+                    />
 
-                    <label htmlFor="passwd">Hasło</label>
-                    <input onChange={this.handleUserPasswd} type="password" id="passwd" className="input-item" />
+                    <label htmlFor="passwd" className={this.state.passwdError ? 'error' : ''}>Hasło</label>
+                    <input
+                        onChange={this.handleUserPasswd}
+                        type="password" id="passwd"
+                        className={`input-item ${this.state.passwdError ? 'error' : ''}`}
+                    />
 
-                    <label htmlFor="confirm-passwd">Potwierdzenie hasła</label>
-                    <input onChange={this.handleConfirmPasswd} type="password" id="confirm-passwd" className="input-item" />
+                    <label htmlFor="confirm-passwd" className={this.state.confirmPasswdError ? 'error' : ''}>Potwierdzenie hasła</label>
+                    <input
+                        onChange={this.handleConfirmPasswd}
+                        type="password" id="confirm-passwd"
+                        className={`input-item ${this.state.confirmPasswdError ? 'error' : ''}`}
+                    />
+
+                    {!(this.state.loginError === '') && <p>{this.state.loginError}</p>}
+                    {!(this.state.emailError === '') && <p>{this.state.emailError}</p>}
+                    {!(this.state.passwdError === '') && <p>{this.state.passwdError}</p>}
+                    {!(this.state.confirmPasswdError === '') && <p>{this.state.confirmPasswdError}</p>}
 
                     <button type="submit" className="btn btn-submit">Zarejestruj się</button>
-
-                    <div ref={elem => this._errorsList = elem} className="errors"></div>
                 </form>
             </section>
         );
