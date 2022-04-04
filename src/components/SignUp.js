@@ -19,109 +19,122 @@ class SignUp extends Component {
         }
     }
 
+    /**********ustawienie stanów po wypełnieniu każdego z pól formularza**********/
     handleUserLogin = (e) => {
         this.setState(() => {
-            return { login: e.target.value }
+            return { login: e.target.value };
         })
     }
 
     handleUserEmail = (e) => {
         this.setState(() => {
-            return { email: e.target.value }
+            return { email: e.target.value };
         })
     }
 
     handleUserPasswd = (e) => {
         this.setState(() => {
-            return { passwd: e.target.value }
+            return { passwd: e.target.value };
         })
     }
 
     handleConfirmPasswd = (e) => {
         this.setState(() => {
-            return { confirmPasswd: e.target.value }
+            return { confirmPasswd: e.target.value };
         })
     }
 
     validateForm = (event) => {
         event.preventDefault();
 
-        this.setState((currentState) => {
-            if (!currentState.login) {
-                return { loginError: 'Podaj nazwę użytkownika' }
-
-            } else if (currentState.login.trim().length < 4) {
-                return { loginError: 'Nazwa użytkownika powinna się składać z minimum 4 symboli' }
-            }
-            else if (currentState.loginError){
-                currentState.loginError = ''; //czyscimy error po przeładowaniu
-            }
-        });
-
-        this.setState((currentState) => {
-            if (!currentState.email) {
-                return { emailError: 'Podaj adres email' }
-
-            } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(currentState.email.trim())) {
-                return { emailError: 'Niepoprawny adres email' }
-            }
-            else if (currentState.emailError){
-                currentState.emailError = '';
-            }
-        });
-
-        this.setState((currentState) => {
-            currentState.passwdError = '';
-
-            //dorobić w sprawdzeniu hasła, czy składa się ono z co najmniej 1 cyfry
-            if (currentState['passwd'] !== '') {
-                const arrFromPasswd = Array.from(currentState['passwd']);
-                let passwdCorrect = false;
-
-                if (arrFromPasswd.length >= 6) {
-                    for (const char of arrFromPasswd) {
-                        if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
-                            continue;
-                        } else {
-                            passwdCorrect = true;
-                            break;//zeby nie wykonywac niepotrzebnych iteracji
-                        }
-                    }
-                    if (!passwdCorrect) {
-                        return { passwdError: 'Niewystarczająco mocne hasło! (musi zawierać !, #, @, $ lub %)' }
-                    }
-                } else {
-                    return {passwdError: 'Hasło jest za krótkie! (min 6 znaków)'}
-                }
-
-            } else {
-                return { passwdError: 'Podaj hasło!' }
-            }
-        })
-
-        this.setState((currentState) => {      
-            if (!currentState.confirmPasswd) {
-                return { confirmPasswdError: 'Potwierdź hasło!' }
-                
-            } else if (currentState.passwd !== currentState.confirmPasswd 
-                        && !currentState.passwdError) {
-                return { confirmPasswdError: 'Podane hasła się nie zgadzają!' }
-                
-            } else if (currentState.confirmPasswdError){
-                return {confirmPasswdError: ''}
-            }
-        })    
-        
-        /* this.areDataOk(); */
-    }
-
-    componentDidUpdate() {
-        let dataReadyToBeSent = false;
+        let dataReadyToBeSent = true;//jezeli beda bledy to ustawie to na false
         let inputs = [];
         let nonEmptyInputsCount = 0;
         let errors = [];
-        let nonEmptyErrorsCount = 0;
+        
+        /***************ustawienie stanów po zdarzeniu submit***************/
+        if (!this.state.login) {
+            this.setState(() => {
+                return { loginError: 'Podaj nazwę użytkownika' };
+            })
 
+        } else if (this.state.login.trim().length < 4) {
+            this.setState(() => {
+                return { loginError: 'Nazwa użytkownika powinna się składać z minimum 4 symboli' };
+            })
+        } else if (this.state.loginError) {
+            this.setState(() => {
+                return { loginError: '' }; //czyscimy error po przeładowaniu
+            })
+        }
+
+        if (!this.state.email) {
+            this.setState(() => {
+                return { emailError: 'Podaj adres email' };
+            })
+
+        } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(this.state.email.trim())) {
+            this.setState(() => {
+                return { emailError: 'Niepoprawny adres email' };
+            })
+        } else if (this.state.emailError) {
+            this.setState(() => {
+                return { emailError: '' };
+            })
+        }
+
+        //dorobić w sprawdzeniu hasła, czy składa się ono z co najmniej 1 cyfry
+        if (this.state['passwd'] !== '') {
+            const arrFromPasswd = Array.from(this.state['passwd']);
+            let passwdCorrect = false;
+
+            if (arrFromPasswd.length >= 6) {
+                for (const char of arrFromPasswd) {
+                    if (!(char === '!' || char === '#' || char === '@' || char === '$' || char === '%')) {
+                        continue;
+                    } else {
+                        passwdCorrect = true;
+                        if (this.state.passwdError) {
+                            this.setState(() => {
+                                return { passwdError: '' };
+                            });
+                        }
+                        break;
+                    }
+                }
+                if (!passwdCorrect) {
+                    this.setState(() => {
+                        return { passwdError: 'Niewystarczająco mocne hasło! (musi zawierać !, #, @, $ lub %)' }
+                    });
+                }
+            } else {
+                this.setState(() => {
+                    return { passwdError: 'Hasło jest za krótkie! (min 6 znaków)' }
+                });
+            }
+
+        } else {
+            this.setState(() => {
+                return { passwdError: 'Podaj hasło!' }
+            });
+        }
+
+        if (!this.state.confirmPasswd && !this.state.passwdError) {
+            this.setState(() => {
+                return { confirmPasswdError: 'Potwierdź hasło!' }
+            });
+        } else if (this.state.passwd !== this.state.confirmPasswd
+            && !this.state.passwdError) {
+            this.setState(() => {
+                return { confirmPasswdError: 'Podane hasła się nie zgadzają!' }
+            });
+        } else if (this.state.confirmPasswdError) {
+            this.setState(() => {
+                return { confirmPasswdError: '' }
+            });
+        }
+
+        /********** Sprawdzenie czy dane sa gotowe do wysłania**********/
         for (const [key, value] of Object.entries(this.state)) {
             if (key.includes('Error')) {
                 errors.push(value);
@@ -129,43 +142,43 @@ class SignUp extends Component {
                 inputs.push(value);
             }
         }
-        
-        inputs.forEach(input => {
+
+    /*     inputs.forEach(input => {
             //jezeli input nie jest pusty
             if (input) {
-               nonEmptyInputsCount++;
-            } 
+                nonEmptyInputsCount++;
+            }
         });
-        
-        if(nonEmptyInputsCount === inputs.length) {
-            dataReadyToBeSent = true;
-        }
 
-        errors.forEach(error => {
+        if (nonEmptyInputsCount === inputs.length) {
+            dataReadyToBeSent = true;
+        } */
+
+        for (const error of errors) {
             //jezeli error nie jest pusty (zawiera komunikat błędu)
             if (error) {
-                dataReadyToBeSent = false;;
+                dataReadyToBeSent = false;
+                break;
             }
-        })
-
+        }
         if (dataReadyToBeSent) {
             this.signUserUp();
         }
     }
 
- /*    componentDidUpdate() {
-        if (this.state.login &&
-            this.state.email &&
-            this.state.passwd &&
-            this.state.confirmPasswd &&
-            !this.state.loginError &&
-            !this.state.emailError &&
-            !this.state.passwdError &&
-            !this.state.confirmPasswdError
-        ) {
-            this.signUserUp();
-        }
-    } */
+    /*    componentDidUpdate() {
+           if (this.state.login &&
+               this.state.email &&
+               this.state.passwd &&
+               this.state.confirmPasswd &&
+               !this.state.loginError &&
+               !this.state.emailError &&
+               !this.state.passwdError &&
+               !this.state.confirmPasswdError
+           ) {
+               this.signUserUp();
+           }
+       } */
 
     signUserUp = () => {
         console.log('signUserUp()');
@@ -187,7 +200,9 @@ class SignUp extends Component {
             'https://akademia108.pl/api/social-app/user/signup',
             JSON.stringify(userData),
             axiosConfig)
-            .then(res => console.log("RESPONSE RECEIVED", res))
+            .then(res => {
+                
+            })
             .catch(err => console.log("AXIOS ERROR", err))
     }
 
@@ -218,14 +233,14 @@ class SignUp extends Component {
                     <label htmlFor="passwd" className={this.state.passwdError ? 'error' : ''}>Hasło</label>
                     <input
                         onChange={this.handleUserPasswd}
-                        type="password" id="passwd"
+                        type="text" id="passwd"
                         className={`input-item ${this.state.passwdError ? 'error' : ''}`}
                     />
 
                     <label htmlFor="confirm-passwd" className={this.state.confirmPasswdError ? 'error' : ''}>Potwierdzenie hasła</label>
                     <input
                         onChange={this.handleConfirmPasswd}
-                        type="password" id="confirm-passwd"
+                        type="text" id="confirm-passwd"
                         className={`input-item ${this.state.confirmPasswdError ? 'error' : ''}`}
                     />
 
