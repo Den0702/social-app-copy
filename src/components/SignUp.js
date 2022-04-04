@@ -53,7 +53,7 @@ class SignUp extends Component {
             } else if (currentState.login.trim().length < 4) {
                 return { loginError: 'Nazwa użytkownika powinna się składać z minimum 4 symboli' }
             }
-            else {
+            else if (currentState.loginError){
                 currentState.loginError = ''; //czyscimy error po przeładowaniu
             }
         });
@@ -65,7 +65,7 @@ class SignUp extends Component {
             } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(currentState.email.trim())) {
                 return { emailError: 'Niepoprawny adres email' }
             }
-            else {
+            else if (currentState.emailError){
                 currentState.emailError = '';
             }
         });
@@ -99,8 +99,7 @@ class SignUp extends Component {
             }
         })
 
-        this.setState((currentState) => {
-            
+        this.setState((currentState) => {      
             if (!currentState.confirmPasswd) {
                 return { confirmPasswdError: 'Potwierdź hasło!' }
                 
@@ -108,7 +107,7 @@ class SignUp extends Component {
                         && !currentState.passwdError) {
                 return { confirmPasswdError: 'Podane hasła się nie zgadzają!' }
                 
-            } else {
+            } else if (currentState.confirmPasswdError){
                 return {confirmPasswdError: ''}
             }
         })    
@@ -145,12 +144,9 @@ class SignUp extends Component {
         errors.forEach(error => {
             //jezeli error nie jest pusty (zawiera komunikat błędu)
             if (error) {
-                nonEmptyErrorsCount++;
+                dataReadyToBeSent = false;;
             }
         })
-        if(nonEmptyErrorsCount === errors.length) {
-            dataReadyToBeSent = false;
-        }
 
         if (dataReadyToBeSent) {
             this.signUserUp();
