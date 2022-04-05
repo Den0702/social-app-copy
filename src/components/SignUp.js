@@ -15,7 +15,8 @@ class SignUp extends Component {
             passwd: '',
             passwdError: '',
             confirmPasswd: '',
-            confirmPasswdError: ''
+            confirmPasswdError: '',
+            response: ''
         }
     }
 
@@ -47,33 +48,33 @@ class SignUp extends Component {
     validateForm = (event) => {
         event.preventDefault();
 
-        let dataReadyToBeSent = true;//jezeli beda bledy to ustawie to na false
-        let inputs = [];
-        let nonEmptyInputsCount = 0;
-        let errors = [];
-        
+        let dataReadyToBeSent = true;//jezeli choc jedno pole bedzie niepoprawne, to sie ustawi na false
+
         /***************ustawienie stanów po zdarzeniu submit***************/
+        //walidacja nazwy użytkownika
         if (!this.state.login) {
+            dataReadyToBeSent = false;
             this.setState(() => {
                 return { loginError: 'Podaj nazwę użytkownika' };
             })
-
         } else if (this.state.login.trim().length < 4) {
+            dataReadyToBeSent = false;
             this.setState(() => {
                 return { loginError: 'Nazwa użytkownika powinna się składać z minimum 4 symboli' };
             })
         } else if (this.state.loginError) {
             this.setState(() => {
-                return { loginError: '' }; //czyscimy error po przeładowaniu
+                return { loginError: '' }; //czyszczenie error'a po przeładowaniu
             })
         }
-
+        //walidacja adresu poczty
         if (!this.state.email) {
+            dataReadyToBeSent = false;
             this.setState(() => {
                 return { emailError: 'Podaj adres email' };
             })
-
         } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(this.state.email.trim())) {
+            dataReadyToBeSent = false;
             this.setState(() => {
                 return { emailError: 'Niepoprawny adres email' };
             })
@@ -82,7 +83,7 @@ class SignUp extends Component {
                 return { emailError: '' };
             })
         }
-
+        //walidacja hasła
         //dorobić w sprawdzeniu hasła, czy składa się ono z co najmniej 1 cyfry
         if (this.state['passwd'] !== '') {
             const arrFromPasswd = Array.from(this.state['passwd']);
@@ -104,82 +105,45 @@ class SignUp extends Component {
                 }
                 if (!passwdCorrect) {
                     this.setState(() => {
+                        dataReadyToBeSent = false;
                         return { passwdError: 'Niewystarczająco mocne hasło! (musi zawierać !, #, @, $ lub %)' }
                     });
                 }
             } else {
+                dataReadyToBeSent = false;
                 this.setState(() => {
                     return { passwdError: 'Hasło jest za krótkie! (min 6 znaków)' }
                 });
             }
 
         } else {
+            dataReadyToBeSent = false;
             this.setState(() => {
                 return { passwdError: 'Podaj hasło!' }
             });
         }
-
+        //sprawdzenie wzajemnej korelacji pomiedzy polem hasło a polem potwierdź hasło
         if (!this.state.confirmPasswd && !this.state.passwdError) {
+            dataReadyToBeSent = false;
             this.setState(() => {
                 return { confirmPasswdError: 'Potwierdź hasło!' }
             });
-        } else if (this.state.passwd !== this.state.confirmPasswd
-            && !this.state.passwdError) {
+        } else if (this.state.passwd !== this.state.confirmPasswd && !this.state.passwdError) {
+            dataReadyToBeSent = false;
             this.setState(() => {
                 return { confirmPasswdError: 'Podane hasła się nie zgadzają!' }
             });
-        } else if (this.state.confirmPasswdError) {
+        } else if (this.state.confirmPasswdError && !this.state.passwdError) {
             this.setState(() => {
                 return { confirmPasswdError: '' }
             });
         }
 
-        /********** Sprawdzenie czy dane sa gotowe do wysłania**********/
-        for (const [key, value] of Object.entries(this.state)) {
-            if (key.includes('Error')) {
-                errors.push(value);
-            } else {
-                inputs.push(value);
-            }
-        }
-
-    /*     inputs.forEach(input => {
-            //jezeli input nie jest pusty
-            if (input) {
-                nonEmptyInputsCount++;
-            }
-        });
-
-        if (nonEmptyInputsCount === inputs.length) {
-            dataReadyToBeSent = true;
-        } */
-
-        for (const error of errors) {
-            //jezeli error nie jest pusty (zawiera komunikat błędu)
-            if (error) {
-                dataReadyToBeSent = false;
-                break;
-            }
-        }
         if (dataReadyToBeSent) {
             this.signUserUp();
         }
     }
-
-    /*    componentDidUpdate() {
-           if (this.state.login &&
-               this.state.email &&
-               this.state.passwd &&
-               this.state.confirmPasswd &&
-               !this.state.loginError &&
-               !this.state.emailError &&
-               !this.state.passwdError &&
-               !this.state.confirmPasswdError
-           ) {
-               this.signUserUp();
-           }
-       } */
-
+    
     signUserUp = () => {
         console.log('signUserUp()');
 
@@ -201,7 +165,11 @@ class SignUp extends Component {
             JSON.stringify(userData),
             axiosConfig)
             .then(res => {
-                
+                if (res.data.signedup) {
+                    this.setState(() => {
+                        return { response: `Dziękuję, ${res.data.user.username}, jesteś zarejestrowany`}
+                    })
+                }
             })
             .catch(err => console.log("AXIOS ERROR", err))
     }
@@ -248,12 +216,15 @@ class SignUp extends Component {
                     {!(this.state.emailError === '') && <p>{this.state.emailError}</p>}
                     {!(this.state.passwdError === '') && <p>{this.state.passwdError}</p>}
                     {!(this.state.confirmPasswdError === '') && <p>{this.state.confirmPasswdError}</p>}
+                    {/* Jak odpowiedź nie jest pusta to pokaż ją */}
+                    {this.state.response !== '' && <p>{this.state.response}</p>}
 
                     <button type="submit" className="btn btn-submit">Zarejestruj się</button>
                 </form>
             </section>
         );
     }
+
 }
 
 export default SignUp;
