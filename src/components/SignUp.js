@@ -16,6 +16,7 @@ class SignUp extends Component {
             passwdError: '',
             confirmPasswd: '',
             confirmPasswdError: '',
+
             response: ''
         }
     }
@@ -48,10 +49,10 @@ class SignUp extends Component {
     validateForm = (event) => {
         event.preventDefault();
 
-        let dataReadyToBeSent = true;//jezeli choc jedno pole bedzie niepoprawne, to sie ustawi na false
+        let dataReadyToBeSent = true;//jezeli przynajmniej jedno pole bedzie niepoprawne, to sie ustawi na false
 
         /***************ustawienie stanów po zdarzeniu submit***************/
-        //walidacja nazwy użytkownika
+        //------walidacja nazwy użytkownika---------
         if (!this.state.login) {
             dataReadyToBeSent = false;
             this.setState(() => {
@@ -67,7 +68,7 @@ class SignUp extends Component {
                 return { loginError: '' }; //czyszczenie error'a po przeładowaniu
             })
         }
-        //walidacja adresu poczty
+        //----walidacja adresu poczty---
         if (!this.state.email) {
             dataReadyToBeSent = false;
             this.setState(() => {
@@ -83,7 +84,7 @@ class SignUp extends Component {
                 return { emailError: '' };
             })
         }
-        //walidacja hasła
+        //----walidacja hasła-----
         //dorobić w sprawdzeniu hasła, czy składa się ono z co najmniej 1 cyfry
         if (this.state['passwd'] !== '') {
             const arrFromPasswd = Array.from(this.state['passwd']);
@@ -122,28 +123,31 @@ class SignUp extends Component {
                 return { passwdError: 'Podaj hasło!' }
             });
         }
-        //sprawdzenie wzajemnej korelacji pomiedzy polem hasło a polem potwierdź hasło
-        if (!this.state.confirmPasswd && !this.state.passwdError) {
-            dataReadyToBeSent = false;
-            this.setState(() => {
-                return { confirmPasswdError: 'Potwierdź hasło!' }
-            });
-        } else if (this.state.passwd !== this.state.confirmPasswd && !this.state.passwdError) {
-            dataReadyToBeSent = false;
-            this.setState(() => {
-                return { confirmPasswdError: 'Podane hasła się nie zgadzają!' }
-            });
-        } else if (this.state.confirmPasswdError && !this.state.passwdError) {
-            this.setState(() => {
-                return { confirmPasswdError: '' }
-            });
-        }
 
+        //------sprawdzenie wzajemnej korelacji pomiedzy polem hasło a polem potwierdź hasło-----
+        if (this.state.passwd) {
+
+            if (!this.state.confirmPasswd) {
+                dataReadyToBeSent = false;
+                this.setState(() => {
+                    return { confirmPasswdError: 'Potwierdź hasło!' }
+                });
+            } else if (this.state.passwd !== this.state.confirmPasswd) {
+                dataReadyToBeSent = false;
+                this.setState(() => {
+                    return { confirmPasswdError: 'Podane hasła się nie zgadzają!' }
+                });
+            } else {
+                this.setState(() => {
+                    return { confirmPasswdError: '' }
+                });
+            }
+        }
         if (dataReadyToBeSent) {
             this.signUserUp();
         }
     }
-    
+
     signUserUp = () => {
         console.log('signUserUp()');
 
@@ -163,15 +167,14 @@ class SignUp extends Component {
         axios.post(
             'https://akademia108.pl/api/social-app/user/signup',
             JSON.stringify(userData),
-            axiosConfig)
-            .then(res => {
-                if (res.data.signedup) {
-                    this.setState(() => {
-                        return { response: `Dziękuję, ${res.data.user.username}, jesteś zarejestrowany`}
-                    })
-                }
-            })
-            .catch(err => console.log("AXIOS ERROR", err))
+            axiosConfig
+        ).then(res => {
+            if (res.data.signedup) {
+                this.setState(() => {
+                    return { response: `Dziękujemy, ${res.data.user.username}, jesteś zarejestrowany` }
+                })
+            }
+        }).catch(err => console.log("Błąd: ", err.message.username[0]));
     }
 
     render() {
@@ -179,7 +182,6 @@ class SignUp extends Component {
             <section className="sign-up">
                 <form
                     className="signup-form"
-                    ref={elem => this._formElem = elem}
                     action=""
                     onSubmit={this.validateForm}
                 >
