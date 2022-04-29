@@ -1,12 +1,19 @@
-.signup-form {
+.sign-up, .login {
+    background-color: #1ba4ce;
+}
+
+.signup-form, .login-form {
     text-align: left;
     padding: 80px 40px;
-    background-color: #1ba4ce;
 }
 /* Nie działa
 label {
     text-align: left;
 } */
+
+.user-post-message textarea{
+    width: 70%;
+}
 
 .input-item {
     width: 100%;

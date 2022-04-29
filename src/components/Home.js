@@ -7,8 +7,8 @@ import '../css/Home.css';//nie piszemy 'from' przy importowaniu css'a, bo to jes
 import {transformDate} from '../helpers/transformDate';
 
 class Home extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             postsList: []
@@ -22,7 +22,7 @@ class Home extends Component {
                 'Accept': 'application/json'
             }
         }
-        axios.post('https://akademia108.pl/api/social-app/post/latest', axiosConfig)
+        axios.post('https://akademia108.pl/api/social-app/post/latest', {}, axiosConfig)
             .then(res => {
                 /* przekazuje do setState tylko obiekt(nie funkcje), poniewaz ustawiam stan tylko raz */
                 this.setState({
@@ -49,6 +49,38 @@ class Home extends Component {
             this.setState({ postsList: this.state.postsList.concat(res.data) })
         })
         .catch(err => console.log(err))
+    }
+
+    addPost = (event) => {
+        //alert('addPost')
+        event.preventDefault();
+
+        const data = {
+            content: this._userPostTextField.value
+        }
+
+        if (data.content) {
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + this.props.currentUser.jwt_token
+                }
+            };
+
+            axios.post(
+                'https://akademia108.pl/api/social-app/post/add',
+                data,
+                axiosConfig 
+            )
+            .then(res => {
+                    console.log(res);    
+                    this.setState({message: res.data.message})
+                }
+            )
+            .catch(error => console.log(error.data.message))
+        }
+
     }
 
     componentDidMount() {
@@ -86,6 +118,18 @@ class Home extends Component {
 
         return (
             <div>
+                { this.props.currentUser 
+                    && 
+                    <form 
+                        className="form user-post-message"
+                        onSubmit={e => this.addPost(e)}>
+                        <textarea 
+                            ref={textField => this._userPostTextField = textField}
+                        >
+                        </textarea>
+                        <button type="submit" className="btn btn-submit">Nowy post</button>
+                    </form> 
+                }
                 <h2>Home</h2>
                 {updatedPostsList}
                 <button onClick={this.getPostsOlderThen}>showOlder</button>

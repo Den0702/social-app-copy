@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 export const transformDate = (date) => {
     let dateObj = new Date(date);
     let month = dateObj.getMonth();

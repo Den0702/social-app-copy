@@ -181,7 +181,7 @@ class SignUp extends Component {
         return (
             <section className="sign-up">
                 <form
-                    className="signup-form"
+                    className="form signup-form"
                     action=""
                     onSubmit={this.validateForm}
                 >
