@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-export const transformDate = (date) => {
+export const transformDate = date => {
     let dateObj = new Date(date);
     let month = dateObj.getMonth();
 
@@ -40,9 +40,20 @@ export const transformDate = (date) => {
         case 11:
             month = 'Gru';
     }
-    return dateObj.getHours() +
-        ':' + dateObj.getMinutes() +
-        ' - ' + dateObj.getDate() +
-        ' ' + month +
-        ' ' + dateObj.getFullYear();
+
+  /*   if (dateObj.getHours() < 10) {
+        let formattedHours = '0' + dateObj.getHours();        
+    } else {
+        let formattedHours = dateObj.getHours();
+    }
+    if (dateObj.getMinutes() < 10) {
+        let formattedMinutes = '0' + dateObj.getMinutes();
+    } */
+    
+    return `${dateObj.getHours() < 10 ? '0' + dateObj.getHours() : dateObj.getHours()} :
+            ${dateObj.getMinutes() < 10 ? '0' + dateObj.getMinutes() : dateObj.getMinutes()} -
+            ${dateObj.getDate()} 
+            ${month}
+            ${dateObj.getFullYear()}
+            `;
 }

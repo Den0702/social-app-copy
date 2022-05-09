@@ -10,8 +10,6 @@ export default function LogIn(props) {
 
     const [passwd, setPasswd] = useState('');
     const [passwdEmpty, setPasswdError] = useState(false);
-
-    const [loginSucceed, setLoginResult] = useState(true);
     
     //const ttl = 3600;/* czas, po którym użytkownik zostanie automatycznie wylogowany */
     
@@ -39,22 +37,20 @@ export default function LogIn(props) {
         .then(res => {
             console.log(res);
 
-            if (res.data.error) {
-                setLoginResult(false);
-            }
-            /* jesli jest komunikat w odpowiedzi z serwera o tym, ze pole username jest puste */
-            if (typeof(res.data.username) === 'object') {
-                setUsernameError(true);
-            }
-            /* -- || --, ze pole password jest puste */
-            if(typeof(res.data.password) === 'object') {
-                setPasswdError(true);
-            }
             if (!(typeof(res.data.username) === 'object') && !(typeof(res.data.password) === 'object')) {
                 const currentUser = res.data;
 
                 props.saveCurrentUserData(currentUser);//zeby zapisac obiekt uzytkownika do stanu w App         
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));//i jednoczesnie zapisac do localStorage
+            } else {
+                /* jesli jest komunikat w odpowiedzi z serwera o tym, ze pole username jest puste */
+                if (typeof(res.data.username) === 'object') {
+                    setUsernameError(true);
+                }
+                /* -- || --, ze pole password jest puste */
+                if(typeof(res.data.password) === 'object') {
+                    setPasswdError(true);
+                }
             }
         })
         .catch(error => console.log(error));
@@ -66,6 +62,7 @@ export default function LogIn(props) {
     return (
         <section className="login">
             {props.currentUser && <Navigate to="/" />}
+            
             <form
                 className="form login-form" 
                 action=""
@@ -87,7 +84,6 @@ export default function LogIn(props) {
                     className={`input-item ${passwdEmpty ? 'error' : ''}`}
                 />
 
-                {!loginSucceed && <p className={loginSucceed ? '' : 'login-error'}>Niepoprawne dane logowania</p>}
                 {usernameEmpty && <p>Proszę podać nazwę użytkownika</p>}
                 {passwdEmpty && <p>Proszę podać hasło</p>}
                 
