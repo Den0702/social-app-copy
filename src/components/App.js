@@ -54,6 +54,7 @@ class App extends Component {
             },
                 error => {
                     this.setState({ logoutMessage: error.message })
+                    //localStorage.clear();
                 }
             )
             

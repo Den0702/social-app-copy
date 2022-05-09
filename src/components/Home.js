@@ -5,13 +5,15 @@ import axios from "axios";
 import '../css/Home.css';//nie piszemy 'from' przy importowaniu css'a, bo to jest składnia Webpack'a
 
 import {transformDate} from '../helpers/transformDate';
+import Like from './Likes';
+import Post from './Post'
 
 class Home extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            postsList: []
+            postsList: [],
         }
     }
 
@@ -19,12 +21,14 @@ class Home extends Component {
         const axiosConfig = {
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                //przy zalogowaniu dostaje sie tylko posty ktore sie subskrybuje
+                'Bearer': this.props.currentUser ? this.props.currentUser.jwt_token : null
             }
         }
         axios.post('https://akademia108.pl/api/social-app/post/latest', {}, axiosConfig)
             .then(res => {
-                /* przekazuje do setState tylko obiekt(nie funkcje), poniewaz ustawiam stan tylko raz */
+                /* przekazujemy do setState tylko obiekt(nie funkcje), poniewaz nie polegamy na poprzednim stanie */
                 this.setState({
                     postsList: res.data
                 });
@@ -51,38 +55,6 @@ class Home extends Component {
         .catch(err => console.log(err))
     }
 
-    addPost = (event) => {
-        //alert('addPost')
-        event.preventDefault();
-
-        const data = {
-            content: this._userPostTextField.value
-        }
-
-        if (data.content) {
-            let axiosConfig = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + this.props.currentUser.jwt_token
-                }
-            };
-
-            axios.post(
-                'https://akademia108.pl/api/social-app/post/add',
-                data,
-                axiosConfig 
-            )
-            .then(res => {
-                    console.log(res);    
-                    this.setState({message: res.data.message})
-                }
-            )
-            .catch(error => console.log(error.data.message))
-        }
-
-    }
-
     componentDidMount() {
         this.getPostsLatest();
     }
@@ -105,12 +77,13 @@ class Home extends Component {
                         </button>
                     </div>
                     <div className="post-content-holder">
-                        <p className="post-content">
+                        <div className="post-content">
                             {userPost.content}
-                        </p>
-                        <p className="post-date">
+                        </div>
+                        <div className="post-date">
                             {transformDate(userPost.created_at)}
-                        </p>
+                        </div>
+                        <Like id={userPost.id} />
                     </div>
                 </div>
             )
@@ -118,18 +91,7 @@ class Home extends Component {
 
         return (
             <div>
-                { this.props.currentUser 
-                    && 
-                    <form 
-                        className="form user-post-message"
-                        onSubmit={e => this.addPost(e)}>
-                        <textarea 
-                            ref={textField => this._userPostTextField = textField}
-                        >
-                        </textarea>
-                        <button type="submit" className="btn btn-submit">Nowy post</button>
-                    </form> 
-                }
+                <Post currentUser={this.props.currentUser}/>
                 <h2>Home</h2>
                 {updatedPostsList}
                 <button onClick={this.getPostsOlderThen}>showOlder</button>
