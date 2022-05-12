@@ -15,7 +15,8 @@ class App extends Component {
         super();
         /* Initial state jest ustawiany albo na zalogowanego uzytkownika albo na nic */
         this.state = {
-            currentUser: localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : null
+            currentUser: localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : null,
+            isMessageVisible: true
         }
     }
 
@@ -26,13 +27,15 @@ class App extends Component {
         })
     }
 
-    signUserOut = () => {
+    signUserOut = (e) => {
+        //TO DO - powinien tutaj być preventDefault - bo inaczej wypali zdarzenie domyslne - przejscie do URL wskazanego przez linka
+        e.preventDefault();
         //alert('Sign Out!');
         let axiosConfig = {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': 'Bearer ' + this.state.currentUser.jwt_token
+                'Authorization': 'Bearer' + this.state.currentUser.jwt_token
             }
         };
         
@@ -50,11 +53,12 @@ class App extends Component {
                         currentUser: null
                     }
                 })
-                localStorage.clear();
+                localStorage.removeItem('currentUser');
+                setTimeout(() => this.setState({isMessageVisible: false}), 3000)
             },
                 error => {
                     this.setState({ logoutMessage: error.message })
-                    //localStorage.clear();
+                    localStorage.removeItem('currentUser');
                 }
             )
             
@@ -74,10 +78,10 @@ class App extends Component {
                         
                         {!this.state.currentUser && <li> <Link to="/login">Logowanie</Link> </li>}
                         
-                        {this.state.currentUser && <li> <Link to="#" onClick={this.signUserOut}>Wyloguj </Link></li>}
+                        {this.state.currentUser && <li> <Link to="#" onClick={(e) => this.signUserOut(e)}>Wyloguj </Link></li>}
                     </ul>
 
-                    {this.state.logoutMessage && <p className="logout-error">{this.state.logoutMessage}</p> }
+                    {this.state.isMessageVisible && this.state.logoutMessage && <p className="logout-error">{this.state.logoutMessage}</p> }
                 </nav>    
                 <Routes>
                     <Route index="/" element={<Home currentUser={this.state.currentUser}/>} />

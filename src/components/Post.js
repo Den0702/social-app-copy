@@ -1,70 +1,77 @@
 import React, { Component } from "react";
+import { transformDate } from '../helpers/transformDate';
 
-import axios from "axios";
+import axios from 'axios';
 
 class Post extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            message: '',
-            likesNum: 0
+            liked: false,
+            message: ''
         }
     }
 
-    addPost = (event) => {
-        //alert('addPost')
-        event.preventDefault();
-
-        const data = {
-            content: this._userPostTextField.value
+    postLike = () => {
+        const axiosConfig = {
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer' + (this.props.currentUser ? this.props.currentUser.jwt_token : null)
+            }
+        }
+        const requestData = {
+            post_id: this.props.userPost.id
         }
 
-        if (data.content) {
-            let axiosConfig = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + this.props.currentUser.jwt_token
-                }
-            };
+        axios.post(
+            'https://akademia108.pl/api/social-app/post/like',
+            requestData,
+            axiosConfig
+        ).then(res => {
+                console.log(res);
 
-            axios.post(
-                'https://akademia108.pl/api/social-app/post/add',
-                data,
-                axiosConfig
-            ).then(res => {
-                    console.log(res);
-                    this.setState({ message: res.data.message })
-                    this._userPostTextField.value = '';
-                }
-            ).catch(error => {
-                console.log(error.data.message)
-                this._userPostTextField.value = '';
-            })
-        }
-
+                this.setState({ 
+                        liked: res.data.liked,
+                        message: res.data.message
+                    }
+                )
+            },
+            error => this.setState( {message: error.response.data.message } )
+        )
     }
 
     render() {
         return (
-            <div>
-                {
-                    this.props.currentUser
-                    &&
-                    <form
-                        className="form user-post-message"
-                        onSubmit={e => this.addPost(e)}>
-                        <textarea
-                            ref={textField => this._userPostTextField = textField}
-                        >
-                        </textarea>
-                        <button type="submit" className="btn btn-submit">Nowy post</button>
-                    </form>
-                }
+            <div className="user-post-holder" key={this.props.userPost.id}>
+                <div className="post-header">
+                    <div className="avatar-holder">
+                        <img src={this.props.userPost.user.avatar_url} alt="userPhoto" />
+                    </div>
+                    <div className="user-name">
+                        {this.props.userPost.user.username}
+                    </div>
+                    {/* To nie miejsce na ten przycisk */}
+                    <button className="btn follow-btn">
+                        Follow
+                    </button>
+                </div>
+                <div className="post-content-holder">
+                    <div className="post-content">
+                        {this.props.userPost.content}
+                    </div>
+                    <div className="post-date">
+                        {transformDate(this.props.userPost.created_at)}
+                    </div>
+                    <div className="post-like">
+                        <button onClick={this.postLike}>Like </button>
+                        <span>{this.props.userPost.likes.length}</span>
+                    </div>
+                </div>
             </div>
         )
     }
-}
 
+}
 export default Post;
