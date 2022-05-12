@@ -9,7 +9,8 @@ class Post extends Component {
 
         this.state = {
             liked: false,
-            message: ''
+            message: '',
+            likesNum: props.userPost.likes.length
         }
     }
 
@@ -32,13 +33,20 @@ class Post extends Component {
         ).then(res => {
                 console.log(res);
 
-                this.setState({ 
-                        liked: res.data.liked,
-                        message: res.data.message
+                this.setState( (currentState) => {
+                        if(!this.state.liked) {
+                            return { 
+                                liked: res.data.liked,
+                                message: res.data.message,
+                                likesNum: currentState.likesNum + 1
+                            }
+                        }
                     }
                 )
             },
-            error => this.setState( {message: error.response.data.message } )
+            error => this.setState( 
+                {message: error.response.data.message } 
+            )
         )
     }
 
@@ -66,7 +74,7 @@ class Post extends Component {
                     </div>
                     <div className="post-like">
                         <button onClick={this.postLike}>Like </button>
-                        <span>{this.props.userPost.likes.length}</span>
+                        <span>{this.state.likesNum}</span>
                     </div>
                 </div>
             </div>
