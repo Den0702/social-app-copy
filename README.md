@@ -12,8 +12,8 @@ Jest to projekt (w budowie) aplikacji modelującej zachowanie medium społeczno�
 - CSS
 ## Sposób logowania
 Logowanie działa tylko dla predefiniowanych użytkowników:  
-     > **_hasło_**: 1234   
-     > **_możliwe nazwy użytkownika_**: artur, marek, adam, slawek, mietek, tomek, kasia, janek
+     **_hasło_**: 1234   
+     **_możliwe nazwy użytkownika_**: artur, marek, adam, slawek, mietek, tomek, kasia, janek
 ## Źródła
 [Akademia 108](https://akademia108.pl/) - API i dokumentacja
 
