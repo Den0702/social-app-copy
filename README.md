@@ -18,9 +18,12 @@ Logowanie działa tylko dla predefiniowanych użytkowników:
 [Akademia 108](https://akademia108.pl/) - API i dokumentacja
 
 ## Sposób uruchomienia
- W katalogu z projektem uruchomić w konsoli (obsługującej polecenia git) następujące polecenie:
+ W katalogu z projektem uruchomić w konsoli (obsługującej polecenia git) następujące polecenia:
 
-### `npm start`
+``` 
+npm install
+npm start
+```
 
 Otworzyć [http://localhost:3000](http://localhost:3000) żeby zobaczyć działającą aplikację w przeglądarce.
 
