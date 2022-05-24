@@ -10,6 +10,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #2b2a33;
+  color: #aaa;
 }
 
 code {
@@ -17,7 +19,7 @@ code {
     monospace;
 }
 
-/********** Utilities **************/
+/********** Sitewide **************/
 .btn {
     border-radius: 5px;
     padding: 5px 10px;
@@ -26,14 +28,14 @@ code {
 .btn-submit {
     display: block;
     margin: auto;
-    background-color: #fff;
-    color: #30383b;
-    /* #473452 */    
+    background-color: #42414d;
+    color: #aaa;
+     
 }
 
 .btn-submit:hover {
-    background-color: #30383b;
-    color: #fff;
+    background-color: #aaa;
+    color: #42414d;
     transition: all .3s;
 }
 

@@ -1,0 +1,50 @@
+.container {
+	margin-top: 2em;
+	padding: 15px 5px;
+	display: flex;
+	background-color: #42414d;
+	border-radius: 6px;
+	justify-content: center;
+}
+
+.user-post-holder {
+    flex-basis: 70%;
+}
+
+.avatar-holder {
+    width: 70px;
+}
+
+.post-header {
+	text-align: left;
+}
+
+.post-content-holder {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+    padding: 10px 5px;
+}
+
+.avatar-holder img {
+    max-width: 100%;
+}
+
+.user-name {
+    display: flex;
+    justify-content: space-around;
+}
+
+.unfollow-btn {
+    border-radius: 8px;
+    padding: 2px 7px;
+    color: #fff;
+    background-color: #1ba4ce;
+    margin-left: 2%;
+}
+
+.unfollow-btn:hover {
+    color: #1ba4ce;
+    background-color: #fff;
+    transition-duration: .4s;
+}
