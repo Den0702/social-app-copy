@@ -1,23 +1,33 @@
 .container {
-	margin: 1.5em 1em 0;
-	padding: 15px 5px;
-	display: flex;
-	background-color: #42414d;
-	border-radius: 6px;
-	justify-content: center;
+    margin: 1.5em auto 0;
     min-width: 250px;
+    max-width: 600px;
+    position: relative;
 }
 
 .user-post-holder {
-    flex-basis: 70%;
-}
-
-.avatar-holder {
-	max-width: 50px;
+    background-color: #42414d;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-top: 1.5em;
 }
 
 .post-header {
-	text-align: left;
+    /* text-align: left; */
+    display: flex;
+}
+
+.avatar-holder {
+    max-width: 50px;
+}
+
+.avatar-holder img {
+    max-width: 100%;
+    border-radius: 40%;
+}
+
+.user-info {
+	padding: 0 17px;
 }
 
 .post-content-holder {
@@ -30,25 +40,17 @@
 
 .post-content-holder hr {
     width: 50%;
-    border-bottom: 2px solid #fff;
-}
-
-.avatar-holder img {
-	max-width: 100%;
-	border-radius: 40%;
-}
-
-.user-name {
-    display: flex;
-    justify-content: space-around;
+    border-bottom: 1px solid #fff;
+    margin-left: 0;
 }
 
 .unfollow-btn {
+    display: block;
     border-radius: 8px;
     padding: 2px 7px;
     color: #fff;
     background-color: #1ba4ce;
-    margin-left: 2%;
+    margin: 10px 0;
 }
 
 .unfollow-btn:hover {
@@ -56,3 +58,11 @@
     background-color: #fff;
     transition-duration: .4s;
 }
+
+.hide-post {
+	position: absolute;
+	top: 10px;
+	right: 13px;
+    font-weight: 600;
+}
+

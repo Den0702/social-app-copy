@@ -20,6 +20,20 @@ code {
 }
 
 /********** Sitewide **************/
+/*Bo ja tak rozumiem, kazdy z komponentow bedzie sie skladal z jednej sekcji  */
+section {
+    margin: 20px 0;
+}
+
+nav {
+	flex-basis: -moz-available;
+}
+
+nav > ul {
+    display: flex;
+    justify-content: space-around;
+}
+
 .btn {
     border-radius: 5px;
     padding: 5px 10px;
@@ -29,28 +43,33 @@ code {
 .btn-submit {
     display: block;
     margin: auto;
-    background-color: #42414d;
-    color: #aaa;
+    background-color: #aaa;
+    color: #42414d;
      
 }
 
 .btn-submit:hover {
-    background-color: #aaa;
-    color: #42414d;
+    background-color: #42414d;
+    color: #aaa;
     transition: all .3s;
 }
 
-h2 {
+h2, p {
     margin: 0;
 }
 
 ul {
     list-style-type: none;
     margin: 0;
+    padding: 0;
 }
 
 a {
     text-decoration: none;
     color: #aaa;
+}
+
+span {
+    margin: 0 5px;
 }
 /* @media all and (sc) */

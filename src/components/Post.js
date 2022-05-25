@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 
 import { transformDate } from '../helpers/transformDate';
-import '../css/Post.css';
+import '../css/Post.css';//nie piszemy 'from' przy importowaniu css'a, bo to jest składnia Webpack'a
 
 class Post extends Component {
     constructor(props) {
@@ -53,36 +53,39 @@ class Post extends Component {
 
     render() {
         return (
-            <div className="container" key={this.props.userPost.id}>
-                <div className="avatar-holder">
-                    <img src={this.props.userPost.user.avatar_url} alt="userPhoto" />
-                </div>
-                <div className="user-post-holder">
-                    <div className="post-header">
-                        <div className="user-name">
+
+            <div className="user-post-holder" key={this.props.userPost.id}>
+                <div className="post-header">
+                    <div className="avatar-holder">
+                        <img src={this.props.userPost.user.avatar_url} alt="userPhoto" />
+                    </div>
+                    <div className="user-info">
+                        <p className="user-name">
                             {this.props.userPost.user.username}
-                            <button className="hide-post">X</button>
-                        </div>
+                        </p>
                         <button className="btn unfollow-btn">
                             Unfollow
                         </button>
                     </div>
-                    
-                    <div className="post-content-holder">
-                        <div className="post-content">
-                            {this.props.userPost.content}
-                        </div>
-                        <hr />
-                        <div className="post-date">
-                            {transformDate(this.props.userPost.created_at)}
-                        </div>
-                        <div className="post-like">
-                            <button onClick={this.postLike} className="btn">Like </button>
-                            <span>{this.state.likesNum}</span>
-                        </div>
+                </div>
+
+                <button className="hide-post">X</button>
+
+                <div className="post-content-holder">
+                    <p className="post-content">
+                        {this.props.userPost.content}
+                    </p>
+                    <hr />
+                    <div className="post-date">
+                        {transformDate(this.props.userPost.created_at)}
+                    </div>
+                    <div className="post-like">
+                        <button onClick={this.postLike} className="btn like-btn">Like </button>
+                        <span>{this.state.likesNum}</span>
                     </div>
                 </div>
             </div>
+
         )
     }
 }

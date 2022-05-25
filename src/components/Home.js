@@ -1,7 +1,6 @@
 /* eslint-disable default-case */
 import React, { Component } from "react";
 import axios from "axios";
-import '../css/Home.css';//nie piszemy 'from' przy importowaniu css'a, bo to jest składnia Webpack'a
 
 import PostAdd from './PostAdd';
 import Post from './Post';
@@ -48,10 +47,10 @@ class Home extends Component {
             JSON.stringify(requestData),
             JSON.stringify(axiosConfig)
         )
-        .then(res => {
-            this.setState({ postsList: this.state.postsList.concat(res.data) })
-        })
-        .catch(err => console.log(err))
+            .then(res => {
+                this.setState({ postsList: this.state.postsList.concat(res.data) })
+            })
+            .catch(err => console.log(err))
     }
 
     componentDidMount() {
@@ -64,25 +63,27 @@ class Home extends Component {
             /* Przy pobieraniu kolejnych porcji danych, renderowanie nie startuje od zera, tylko zaczynając od aktualnie pobranej porcji. 
             Poprzednie są już zachowane. To zapewnia Virtual DOM */
             return (
-                <Post 
-                    userPost={userPost} 
-                    key={userPost.id} 
-                    currentUser={this.props.currentUser}    
+                <Post
+                    userPost={userPost}
+                    key={userPost.id}
+                    currentUser={this.props.currentUser}
                 />
             )
         });
 
         return (
-            <div className="home">
-                <PostAdd currentUser={this.props.currentUser}/>
+            <section className="home">
+                <PostAdd currentUser={this.props.currentUser} />
                 <h2>Home</h2>
-                {postsList}
-                <button  
-                    className="btn" 
+                <div className="container" >
+                    {postsList}
+                </div>
+                <button
+                    className="btn"
                     onClick={this.getPostsOlderThen}>
-                        showOlder
+                    showOlder
                 </button>
-            </div>
+            </section>
         )
     }
 
