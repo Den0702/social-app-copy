@@ -4,14 +4,16 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 10vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    padding: 10%;
+
 }
 
 /*Bo ja tak rozumiem, kazdy z komponentow bedzie sie skladal z jednej sekcji  */
@@ -19,6 +21,12 @@ section {
     width: 100%;
     padding: 25px 0;
 }
+
+nav > ul {
+    display: flex;
+    justify-content: space-between;
+}
+
 
 
 

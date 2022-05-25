@@ -49,7 +49,7 @@ class PostAdd extends Component {
 
     render() {
         return (
-            <div>
+            <div className="add-post">
                 {
                     this.props.currentUser
                     &&

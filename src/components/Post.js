@@ -68,11 +68,11 @@ class Post extends Component {
                         </button>
                     </div>
                     
-                    
                     <div className="post-content-holder">
                         <div className="post-content">
                             {this.props.userPost.content}
                         </div>
+                        <hr />
                         <div className="post-date">
                             {transformDate(this.props.userPost.created_at)}
                         </div>
@@ -85,6 +85,5 @@ class Post extends Component {
             </div>
         )
     }
-
 }
 export default Post;

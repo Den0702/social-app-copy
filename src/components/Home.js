@@ -73,11 +73,15 @@ class Home extends Component {
         });
 
         return (
-            <div>
+            <div className="home">
                 <PostAdd currentUser={this.props.currentUser}/>
                 <h2>Home</h2>
                 {postsList}
-                <button onClick={this.getPostsOlderThen}>showOlder</button>
+                <button  
+                    className="btn" 
+                    onClick={this.getPostsOlderThen}>
+                        showOlder
+                </button>
             </div>
         )
     }
