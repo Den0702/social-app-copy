@@ -2,7 +2,6 @@
     margin: 1.5em auto 0;
     min-width: 250px;
     max-width: 600px;
-    position: relative;
 }
 
 .user-post-holder {
@@ -10,6 +9,7 @@
     border-radius: 6px;
     padding: 10px 15px;
     margin-top: 1.5em;
+    position: relative;
 }
 
 .post-header {
