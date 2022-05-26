@@ -25,15 +25,6 @@ section {
     margin: 20px 0;
 }
 
-nav {
-	flex-basis: 370px;
-}
-
-nav > ul {
-    display: flex;
-    justify-content: space-around;
-}
-
 .btn {
     border-radius: 5px;
     padding: 5px 10px;
