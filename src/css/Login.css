@@ -1,4 +1,8 @@
-.login-error,
 .logout-error {
    color: red; 
 }
+
+.logout-success {
+    color: rgb(90, 180, 90);
+}
+

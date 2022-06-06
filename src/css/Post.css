@@ -44,6 +44,10 @@
     margin-left: 0;
 }
 
+.post-content {
+	color: #ffffffd4;
+}
+
 .unfollow-btn {
     display: block;
     border-radius: 8px;
@@ -66,3 +70,14 @@
     font-weight: 600;
 }
 
+.btn.like-btn {
+	background-color: transparent;
+	border: 0;
+	padding: 0;
+    color:#fff;
+    margin-top: 10px;
+}
+
+.user-name {
+	text-align: left;
+}

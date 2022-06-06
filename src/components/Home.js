@@ -1,9 +1,11 @@
 /* eslint-disable default-case */
 import React, { Component } from "react";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 import PostAdd from './PostAdd';
 import Post from './Post';
+import Recommendations from './Recommendations';
 
 class Home extends Component {
     constructor(props) {
@@ -20,7 +22,7 @@ class Home extends Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 //przy zalogowaniu dostaje sie tylko posty ktore sie subskrybuje
-                'Authorization': 'Bearer' + (this.props.currentUser ? this.props.currentUser.jwt_token : null)
+                'Authorization': 'Bearer ' + (this.props.currentUserProp ? this.props.currentUserProp.jwt_token : null)
             }
         }
         axios.post('https://akademia108.pl/api/social-app/post/latest', {}, axiosConfig)
@@ -38,27 +40,60 @@ class Home extends Component {
         const axiosConfig = {
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + (this.props.currentUserProp ? this.props.currentUserProp.jwt_token : null)
             }
         }
-        const requestData = { date: this.state.postsList[this.state.postsList.length - 1].created_at }
+        const requestData = {
+            date: this.state.postsList[this.state.postsList.length - 1].created_at
+        }
+
         axios.post(
             'https://akademia108.pl/api/social-app/post/older-then',
             JSON.stringify(requestData),
-            JSON.stringify(axiosConfig)
+            axiosConfig
         )
             .then(res => {
-                this.setState({ postsList: this.state.postsList.concat(res.data) })
+                this.setState({
+                    postsList: this.state.postsList.concat(res.data)
+                })
             })
             .catch(err => console.log(err))
     }
 
+    getPostsNewerThen = () => {
+        const axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + (this.props.currentUserProp ? this.props.currentUserProp.jwt_token : null)
+            }
+        }
+        const requestData = {
+            date: this.state.postsList[0].created_at
+        }
+
+        axios.post('https://akademia108.pl/api/social-app/post/newer-then',
+            requestData,
+            axiosConfig
+        )
+            .then(res =>
+                this.setState({
+                    postsList: res.data.concat(this.state.postsList)
+                })
+            )
+            .catch(err => console.log(err))
+    }
+
+    //ta metoda uruchamia sie przy pierwszym zaladowaniu komponentu
     componentDidMount() {
+        this.props.tokenCheckMethod();
         this.getPostsLatest();
     }
 
     render() {
-        console.log(this.props.currentUser);
+        console.log(this.props.currentUserProp);
+
         let postsList = this.state.postsList.map(userPost => {
             /* Przy pobieraniu kolejnych porcji danych, renderowanie nie startuje od zera, tylko zaczynając od aktualnie pobranej porcji. 
             Poprzednie są już zachowane. To zapewnia Virtual DOM */
@@ -66,18 +101,33 @@ class Home extends Component {
                 <Post
                     userPost={userPost}
                     key={userPost.id}
-                    currentUser={this.props.currentUser}
+                    currentUserProp={this.props.currentUserProp}
+                    clearUserMethod={this.props.clearUserMethod}
                 />
             )
         });
 
         return (
             <section className="home">
-                <PostAdd currentUser={this.props.currentUser} />
-                <h2>Home</h2>
-                <div className="container" >
+                <div className="recommendations">
+                    {
+                        this.props.currentUserProp &&
+                        <Recommendations
+                            currentUserProp={this.props.currentUserProp}
+                        />
+                    }
+                </div>
+
+                <div className="container">
+                    <PostAdd
+                        currentUserProp={this.props.currentUserProp}
+                        getNewerPosts={this.getPostsNewerThen}
+                        clearUserMethod={this.props.clearUserMethod}
+                    />
+
                     {postsList}
                 </div>
+
                 <button
                     className="btn"
                     onClick={this.getPostsOlderThen}>

@@ -27,15 +27,43 @@ class App extends Component {
         })
     }
 
+    componentDidMount() {
+        //wyslac zapytanie do backendu, czy token jest wazny(zapytanie o profil uzytkownika), inaczej wyczyscic jego dane z localStorage
+        this.isTokenValid();
+    }
+
+    isTokenValid = () => {
+        const axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + (this.state.currentUser ? this.state.currentUser.jwt_token : null)
+            }
+        }
+
+        axios.post('https://akademia108.pl/api/social-app/user/profile',
+            {},
+            axiosConfig
+        ).then(res => console.log(res)
+        ).catch(() => {
+            this.clearUser();
+        })
+    }
+
+    clearUser = () => {
+        localStorage.removeItem('currentUser')
+        this.setState({ currentUser: null })
+    }
+
     signUserOut = (e) => {
         //TO DO - powinien tutaj być preventDefault - bo inaczej wypali zdarzenie domyslne - przejscie do URL wskazanego przez linka
         e.preventDefault();
         //alert('Sign Out!');
-        let axiosConfig = {
+        const axiosConfig = {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': 'Bearer' + this.state.currentUser.jwt_token
+                'Authorization': 'Bearer ' + this.state.currentUser.jwt_token
             }
         };
 
@@ -49,15 +77,16 @@ class App extends Component {
                 // jezeli dostamy pozytywna odpowiedz o wylogowaniu, to wtedy odswiezymy stan uzytkownika + wiadomosc o pozytywnym wylogowaniu
                 this.setState(() => {
                     return {
-                        logoutMessage: res.data.message,
+                        logoutSuccessMessage: res.data.message,
                         currentUser: null
                     }
                 })
                 localStorage.removeItem('currentUser');
+                //wyswietla komunikat serwera o wylogowaniu uzytkownika
                 setTimeout(() => this.setState({ isMessageVisible: false }), 3000)
             },
                 error => {
-                    this.setState({ logoutMessage: error.message })
+                    this.setState({ logoutErrorMessage: error.message })
                     localStorage.removeItem('currentUser');
                 }
             )
@@ -79,12 +108,21 @@ class App extends Component {
 
                             {this.state.currentUser && <li> <Link to="#" onClick={(e) => this.signUserOut(e)}>Wyloguj </Link></li>}
                         </ul>
-
-                        {this.state.isMessageVisible && this.state.logoutMessage && <p className="logout-error">{this.state.logoutMessage}</p>}
+                        {this.state.isMessageVisible && this.state.logoutSuccessMessage && <p className="logout-success">{this.state.logoutSuccessMessage}</p>}
+                        {this.state.isMessageVisible && this.state.logoutErrorMessage && <p className="logout-error">{this.state.logoutErrorMessage}</p>}
                     </nav>
                 </header>
                 <Routes>
-                    <Route index="/" element={<Home currentUser={this.state.currentUser} />} />
+                    <Route
+                        index="/"
+                        element={
+                            <Home
+                                currentUserProp={this.state.currentUser}
+                                tokenCheckMethod={this.isTokenValid}
+                                clearUserMethod={this.clearUser}/* bedzie przekazywany do komponentu potomnego wzgledem Home */
+                            />
+                        }
+                    />
                     <Route path="signup" element={<SignUp />} />
                     <Route
                         path="login"
@@ -92,7 +130,7 @@ class App extends Component {
                             <LogIn
                                 /* logoutMethod={this.signUserOut} */
                                 saveCurrentUserData={this.saveCurrentUserData}
-                                currentUser={this.state.currentUser}
+                                currentUserProp={this.state.currentUser}
                             />
                         }
                     />

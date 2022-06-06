@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 import axios from "axios";
 
-
 class PostAdd extends Component {
     constructor(props) {
         super(props);
@@ -20,12 +19,13 @@ class PostAdd extends Component {
             content: this._userPostTextField.value
         }
 
+        //jezeli post nie jest pusty
         if (data.content) {
             let axiosConfig = {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + this.props.currentUser.jwt_token
+                    'Authorization': 'Bearer ' + this.props.currentUserProp.jwt_token
                 }
             };
 
@@ -36,10 +36,14 @@ class PostAdd extends Component {
             ).then(res => {
                     console.log(res);
                     this.setState({ message: res.data.message })
+                    this.props.getNewerPosts();//zeby strona sie odswiezyla i ten nowoutworzony post sie pojawil
                     this._userPostTextField.value = '';
                 }
             ).catch(error => {
                 console.log(error.data.message);
+
+                this.props.clearUserMethod();
+
                 this.setState({ message: error.data.message})
                 this._userPostTextField.value = '';
             })
@@ -51,13 +55,14 @@ class PostAdd extends Component {
         return (
             <div className="add-post">
                 {
-                    this.props.currentUser
+                    this.props.currentUserProp
                     &&
                     <form
                         className="form user-post-message"
                         onSubmit={e => this.addPost(e)}>
                         <textarea
                             ref={textField => this._userPostTextField = textField}
+                            placeholder="Treść twojej wiadomosci..."
                         >
                         </textarea>
                         <button type="submit" className="btn btn-submit">Nowy post</button>

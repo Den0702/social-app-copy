@@ -177,6 +177,14 @@ class SignUp extends Component {
         }).catch(err => console.log("Błąd: ", err.message.username[0]));
     }
 
+    componentDidMount() {
+        document.body.style.backgroundColor = '#1ba4ce';
+    }
+
+    componentWillUnmount() {
+        document.body.style.backgroundColor = null;
+    }
+
     render() {
         return (
             <section className="sign-up">
