@@ -33,7 +33,7 @@ class Home extends Component {
                     postsList: res.data
                 });
             })
-            .catch(error => console.log(error));
+            .catch(err => console.log(`Home: The getPostsLatest query caused this error: ${err}`));
     }
 
     getPostsOlderThen = () => {
@@ -58,7 +58,7 @@ class Home extends Component {
                     postsList: this.state.postsList.concat(res.data)
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(`Home: The getPostsOlderThen's query caused this error: ${err}`))
     }
 
     getPostsNewerThen = () => {
@@ -82,17 +82,18 @@ class Home extends Component {
                     postsList: res.data.concat(this.state.postsList)
                 })
             )
-            .catch(err => console.log(err))
+            .catch(err => console.log(`Home: The getPostsNewerThen's query caused this error: ${err}`))
     }
 
     //ta metoda uruchamia sie przy pierwszym zaladowaniu komponentu
     componentDidMount() {
-        this.props.tokenCheckMethod();
+        if(this.props.currentUserProp) {
+            this.props.tokenCheckMethod();
+        }
         this.getPostsLatest();
     }
 
     render() {
-        console.log(this.props.currentUserProp);
 
         let postsList = this.state.postsList.map(userPost => {
             /* Przy pobieraniu kolejnych porcji danych, renderowanie nie startuje od zera, tylko zaczynając od aktualnie pobranej porcji. 
@@ -109,15 +110,13 @@ class Home extends Component {
 
         return (
             <section className="home">
-                <div className="recommendations">
-                    {
-                        this.props.currentUserProp &&
-                        <Recommendations
-                            currentUserProp={this.props.currentUserProp}
-                        />
-                    }
-                </div>
-
+                {
+                    this.props.currentUserProp &&
+                    <Recommendations
+                        clearUserMethod={this.props.clearUserMethod}
+                        currentUserProp={this.props.currentUserProp}
+                    />
+                }
                 <div className="container">
                     <PostAdd
                         currentUserProp={this.props.currentUserProp}

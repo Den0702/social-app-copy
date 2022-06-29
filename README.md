@@ -5,15 +5,16 @@ Jest to projekt (w budowie) aplikacji modelującej zachowanie medium społeczno�
 ## Wykorzystywane narzędzia i technologie
 - React
 - React-router-dom
-- Biblioteka _axios_ do tworzenia zapytań
+- Biblioteka _axios_ do tworzenia zapytań HTTP
 - Local Storage 
 - JSON Web Token
 - HTML
 - CSS
+- Font Awesome do ustawienia infografik
 ## Sposób logowania
 Logowanie działa tylko dla predefiniowanych użytkowników:  
      **_hasło_**: 1234   
-     **_możliwe nazwy użytkownika_**: artur, marek, adam, slawek, mietek, tomek, kasia, janek
+     **_możliwe nazwy użytkownika_**: artur, marek, adam, slawek, mietek, tomek, kasia, janek, piotrek
 ## Źródła
 [Akademia 108](https://akademia108.pl/) - API i dokumentacja
 

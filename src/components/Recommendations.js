@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -8,27 +9,52 @@ export default function Recommendations(props) {
 
     let [recommendations, setNewRecommendations] = useState([]);
 
-    const axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + (props.currentUserProp ? props.currentUserProp.jwt_token : null)
-        }
-    }
+    //czy jest tu niezbedny useEffect?
+    useEffect(() => {
+        const refreshId = setInterval(() => {
+            if (props.currentUserProp) {
+                const axiosConfig = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + (props.currentUserProp ? props.currentUserProp.jwt_token : null)
+                    }
+                }
 
-    axios.post('https://akademia108.pl/api/social-app/follows/recommendations', {}, axiosConfig)
-        .then(res => setNewRecommendations(res.data))
+                axios.post('https://akademia108.pl/api/social-app/follows/recommendations', {}, axiosConfig)
+                    .then(res => setNewRecommendations(res.data))
+                    .catch(err => {
+                            console.log(`Recommendations' query caused this error: ${err} `);
+                            props.clearUserMethod();
+                            clearInterval(refreshId);
+                        }
+                    );
+            }
 
+        }, 20000);
+    }, [recommendations]);
+    
     let recommendationsList = recommendations.map(recommendation => {
-
-        <div className="recommendation">
-            
-        </div>
+        return (
+            <div className="recommendation" key={recommendation.id}>
+                <div className="avatar-holder">
+                    <img src={recommendation.avatar_url} alt="userPhoto" />
+                </div>
+                <p className="user-name">
+                    {recommendation.username}
+                </p>
+                <button className="btn follow-btn">
+                    Follow
+                </button>
+            </div>
+        )
 
     })
 
     return (
-        {recommendationsList}
+        <div className="recommendations">
+            {recommendationsList}
+        </div>
     )
 }
 

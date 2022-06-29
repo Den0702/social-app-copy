@@ -40,7 +40,7 @@ class PostAdd extends Component {
                     this._userPostTextField.value = '';
                 }
             ).catch(error => {
-                console.log(error.data.message);
+                console.log(`addPost's query caused this error: ${error.data.message}`);
 
                 this.props.clearUserMethod();
 

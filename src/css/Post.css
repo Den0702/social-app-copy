@@ -48,7 +48,7 @@
 	color: #ffffffd4;
 }
 
-.unfollow-btn {
+.unfollow-btn, .follow-btn {
     display: block;
     border-radius: 8px;
     padding: 2px 7px;

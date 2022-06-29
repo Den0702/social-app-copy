@@ -26,7 +26,7 @@ export default function LogIn(props) {
         const sendData = {
             'username': `${username}`,
             'password': `${passwd}`,
-            'ttl': 3600 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
+            'ttl': 15 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
         }
 
         const axiosConfig = {
@@ -59,7 +59,7 @@ export default function LogIn(props) {
                 }
             }
         })
-        .catch(error => console.log(error));
+        .catch(error => console.log(`The signUserIn's query caused this error: ${error}`));
         
     }
 
