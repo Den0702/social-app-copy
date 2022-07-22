@@ -113,7 +113,9 @@ class Post extends Component {
                     </div>
                 </div>
 
-                <button className="hide-post">X</button>
+                <button className="hide-post">
+                    <FontAwesomeIcon icon="fa-solid fa-xmark" />
+                </button>
 
                 <div className="post-content-holder">
                     <p className="post-content">
@@ -134,6 +136,7 @@ class Post extends Component {
                                     :
                                     <FontAwesomeIcon icon="fa-regular fa-heart" />
                             } */}
+                            {/* <FontAwesomeIcon icon="fa-solid fa-heart" /> - nie dziala*/}
                             <FontAwesomeIcon icon={faHeart} />
                         </button>
                         <span>{this.state.likesNum}</span>

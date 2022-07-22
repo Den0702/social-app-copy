@@ -26,7 +26,7 @@ export default function LogIn(props) {
         const sendData = {
             'username': `${username}`,
             'password': `${passwd}`,
-            'ttl': 15 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
+            'ttl': 300 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
         }
 
         const axiosConfig = {

@@ -14,6 +14,7 @@ class Home extends Component {
         this.state = {
             postsList: [],
         }
+        console.log(this.state.postsList);
     }
 
     getPostsLatest = () => {
@@ -70,7 +71,7 @@ class Home extends Component {
             }
         }
         const requestData = {
-            date: this.state.postsList[0].created_at
+            date: this.state.postsList[0].created_at // pobiera posty, które są utworzone później niż pierwszy z już załadowanych.
         }
 
         axios.post('https://akademia108.pl/api/social-app/post/newer-then',
@@ -87,7 +88,7 @@ class Home extends Component {
 
     //ta metoda uruchamia sie przy pierwszym zaladowaniu komponentu
     componentDidMount() {
-        if(this.props.currentUserProp) {
+        if (this.props.currentUserProp) {
             this.props.tokenCheckMethod();
         }
         this.getPostsLatest();
@@ -110,21 +111,34 @@ class Home extends Component {
 
         return (
             <section className="home">
-                {
-                    this.props.currentUserProp &&
-                    <Recommendations
-                        clearUserMethod={this.props.clearUserMethod}
-                        currentUserProp={this.props.currentUserProp}
-                    />
-                }
                 <div className="container">
-                    <PostAdd
-                        currentUserProp={this.props.currentUserProp}
-                        getNewerPosts={this.getPostsNewerThen}
-                        clearUserMethod={this.props.clearUserMethod}
-                    />
+                    <aside className="sm">
+                        {
+                            this.props.currentUserProp &&
+                            <Recommendations
+                                clearUserMethod={this.props.clearUserMethod}
+                                currentUserProp={this.props.currentUserProp}
+                            />
+                        }
+                    </aside>
+                    <section className="posts">
+                        <PostAdd
+                            currentUserProp={this.props.currentUserProp}
+                            getNewerPosts={this.getPostsNewerThen}
+                            clearUserMethod={this.props.clearUserMethod}
+                        />
 
-                    {postsList}
+                        {postsList}
+                    </section>
+{/*                     <aside className="lg">
+                        {
+                            this.props.currentUserProp &&
+                            <Recommendations
+                                clearUserMethod={this.props.clearUserMethod}
+                                currentUserProp={this.props.currentUserProp}
+                            />
+                        }
+                    </aside> */}
                 </div>
 
                 <button

@@ -4,36 +4,47 @@ import axios from "axios";
 
 import '../css/Recommendations.css';
 
-
 export default function Recommendations(props) {
 
     let [recommendations, setNewRecommendations] = useState([]);
 
-    //czy jest tu niezbedny useEffect?
     useEffect(() => {
-        const refreshId = setInterval(() => {
-            if (props.currentUserProp) {
-                const axiosConfig = {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + (props.currentUserProp ? props.currentUserProp.jwt_token : null)
-                    }
-                }
+        getRecommendations();
 
-                axios.post('https://akademia108.pl/api/social-app/follows/recommendations', {}, axiosConfig)
-                    .then(res => setNewRecommendations(res.data))
-                    .catch(err => {
-                            console.log(`Recommendations' query caused this error: ${err} `);
-                            props.clearUserMethod();
-                            clearInterval(refreshId);
-                        }
-                    );
+        let refreshId = setInterval(() => {
+            getRecommendations();
+        }, 10000);
+
+        return () => {
+            clearInterval(refreshId);
+        }
+    }, []);
+
+    function getRecommendations() {
+        if (props.currentUserProp) {
+            const axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + (props.currentUserProp ? props.currentUserProp.jwt_token : null)
+                }
             }
 
-        }, 20000);
-    }, [recommendations]);
-    
+            axios.post('https://akademia108.pl/api/social-app/follows/recommendations', {}, axiosConfig)
+                .then(res => {
+                    setNewRecommendations(res.data);
+                })
+                .catch(err => {
+                        console.log(`Recommendations' query caused this error: ${err} `);
+                        props.clearUserMethod();
+
+                        //clearInterval(refreshId);
+                        //return false;
+                    }
+                );
+        }
+    }
+
     let recommendationsList = recommendations.map(recommendation => {
         return (
             <div className="recommendation" key={recommendation.id}>
