@@ -4,7 +4,7 @@ import axios from 'axios';
 import { transformDate } from '../helpers/transformDate';
 import '../css/Post.css';//nie piszemy 'from' przy importowaniu css'a, bo to jest składnia Webpack'a
 
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+//import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Post extends Component {
@@ -14,7 +14,8 @@ class Post extends Component {
         this.state = {
             liked: false,
             message: '',
-            likesNum: props.userPost.likes.length
+            likesNum: props.userPost.likes.length,
+            deleteModalDisplay: false
         }
     }
 
@@ -42,13 +43,13 @@ class Post extends Component {
                 'Authorization': 'Bearer ' + (this.props.currentUserProp ? this.props.currentUserProp.jwt_token : null)
             }
         }
-        const requestData = {
+        const sentData = {
             post_id: this.props.userPost.id
         }
 
         axios.post(
             'https://akademia108.pl/api/social-app/post/like',
-            requestData,
+            sentData,
             axiosConfig
         ).then(res => {
             console.log(res);
@@ -75,11 +76,11 @@ class Post extends Component {
             }
         }
 
-        const sendData = {
+        const sentData = {
             "post_id": this.props.userPost.id
         }
 
-        axios.post('https://akademia108.pl/api/social-app/post/dislike', sendData, axiosConfig)
+        axios.post('https://akademia108.pl/api/social-app/post/dislike', sentData, axiosConfig)
             .then(res => {
                 this.setState((currentState) => {
                     return {
@@ -94,6 +95,33 @@ class Post extends Component {
                     this.setState({ message: error.response.data.message })
                 }
             )
+    }
+
+    postDelete = () => {
+        const axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + (this.props.currentUserProp ? this.props.currentUserProp.jwt_token : null)
+            }
+        }
+
+        const sentData = {
+            post_id: this.props.userPost.id
+        }
+
+        axios.post('https://akademia108.pl/api/social-app/post/delete', sentData, axiosConfig)
+            .then(res => {
+                //console.log(`What is going with postList? ` + this.props.postList);
+
+                return this.props.setPosts(
+                    this.props.postsList.filter((post) => {
+                        return post.id !== res.data.post_id
+                    })
+                )
+            })
+            .catch(error => console.log(error))
+
     }
 
     render() {
@@ -113,9 +141,15 @@ class Post extends Component {
                     </div>
                 </div>
 
-                <button className="hide-post">
-                    <FontAwesomeIcon icon="fa-solid fa-xmark" />
-                </button>
+                {this.props.userPost.user.username === this.props.currentUserProp?.username && (
+                    <button 
+                        className="delete-post"
+                        onClick={ () => this.setState({ deleteModalDisplay: true }) }
+                    >
+                        <FontAwesomeIcon icon="fa-solid fa-xmark"/>{" "}
+                        Delete your post
+                    </button>
+                )}
 
                 <div className="post-content-holder">
                     <p className="post-content">
@@ -130,18 +164,25 @@ class Post extends Component {
                             onClick={!this.state.liked ? this.postAddLike : this.postRemoveLike}
                             className="btn like-btn"
                         >
-                            {/* {
+                            {
                                 this.state.liked ?
                                     <FontAwesomeIcon icon="fa-solid fa-heart" />
                                     :
                                     <FontAwesomeIcon icon="fa-regular fa-heart" />
-                            } */}
-                            {/* <FontAwesomeIcon icon="fa-solid fa-heart" /> - nie dziala*/}
-                            <FontAwesomeIcon icon={faHeart} />
+                            }
+
                         </button>
                         <span>{this.state.likesNum}</span>
                     </div>
                 </div>
+                
+                {this.state.deleteModalDisplay && (
+                    <div className="deleteConfirmation">
+                        <h3>Are you sure you want to delete post?</h3>
+                        <button className="btn yes" onClick={() => this.postDelete()}>Yes</button>{" "}
+                        <button className="btn no" onClick={() => this.setState({ deleteModalDisplay: false})}>No</button>
+                    </div>
+                )}
             </div>
 
         )

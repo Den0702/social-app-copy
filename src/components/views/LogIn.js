@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import '../css/Login.css';
+import '../../css/Login.css';
 import { Navigate } from "react-router-dom";
 
 export default function LogIn(props) {
@@ -23,10 +23,10 @@ export default function LogIn(props) {
     function signUserIn(event) {
         event.preventDefault();
 
-        const sendData = {
+        const sentData = {
             'username': `${username}`,
             'password': `${passwd}`,
-            'ttl': 300 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
+            'ttl': 1 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
         }
 
         const axiosConfig = {
@@ -38,7 +38,7 @@ export default function LogIn(props) {
 
         axios.post(
             'https://akademia108.pl/api/social-app/user/login', 
-            sendData, 
+            sentData, 
             axiosConfig
         )
         .then(res => {

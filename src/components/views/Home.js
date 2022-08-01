@@ -1,11 +1,11 @@
 /* eslint-disable default-case */
-import React, { Component } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import React, { Component } from "react";
 
-import PostAdd from './PostAdd';
-import Post from './Post';
-import Recommendations from './Recommendations';
+import '../../css/Home.css';
+import Post from '../Post';
+import PostAdd from '../PostAdd';
+import Recommendations from '../Recommendations';
 
 class Home extends Component {
     constructor(props) {
@@ -45,13 +45,13 @@ class Home extends Component {
                 'Authorization': 'Bearer ' + (this.props.currentUserProp ? this.props.currentUserProp.jwt_token : null)
             }
         }
-        const requestData = {
+        const sentData = {
             date: this.state.postsList[this.state.postsList.length - 1].created_at
         }
 
         axios.post(
             'https://akademia108.pl/api/social-app/post/older-then',
-            JSON.stringify(requestData),
+            JSON.stringify(sentData),
             axiosConfig
         )
             .then(res => {
@@ -70,12 +70,12 @@ class Home extends Component {
                 'Authorization': 'Bearer ' + (this.props.currentUserProp ? this.props.currentUserProp.jwt_token : null)
             }
         }
-        const requestData = {
+        const sentData = {
             date: this.state.postsList[0].created_at // pobiera posty, które są utworzone później niż pierwszy z już załadowanych.
         }
 
         axios.post('https://akademia108.pl/api/social-app/post/newer-then',
-            requestData,
+            sentData,
             axiosConfig
         )
             .then(res =>
@@ -84,6 +84,10 @@ class Home extends Component {
                 })
             )
             .catch(err => console.log(`Home: The getPostsNewerThen's query caused this error: ${err}`))
+    }
+
+    setPosts = (posts) => {
+        this.setState({ postsList: posts})
     }
 
     //ta metoda uruchamia sie przy pierwszym zaladowaniu komponentu
@@ -105,42 +109,34 @@ class Home extends Component {
                     key={userPost.id}
                     currentUserProp={this.props.currentUserProp}
                     clearUserMethod={this.props.clearUserMethod}
+                    postsList={this.state.postsList}
+                    setPosts={this.setPosts}
                 />
             )
         });
 
         return (
             <section className="home">
-                <div className="container">
-                    <aside className="sm">
-                        {
-                            this.props.currentUserProp &&
-                            <Recommendations
-                                clearUserMethod={this.props.clearUserMethod}
-                                currentUserProp={this.props.currentUserProp}
-                            />
-                        }
-                    </aside>
-                    <section className="posts">
-                        <PostAdd
-                            currentUserProp={this.props.currentUserProp}
-                            getNewerPosts={this.getPostsNewerThen}
+                <aside className="sm">
+                    {
+                        this.props.currentUserProp &&
+                        <Recommendations
                             clearUserMethod={this.props.clearUserMethod}
+                            currentUserProp={this.props.currentUserProp}
                         />
+                    }
+                </aside>
 
-                        {postsList}
-                    </section>
-{/*                     <aside className="lg">
-                        {
-                            this.props.currentUserProp &&
-                            <Recommendations
-                                clearUserMethod={this.props.clearUserMethod}
-                                currentUserProp={this.props.currentUserProp}
-                            />
-                        }
-                    </aside> */}
+                <div className="container">
+                    <PostAdd
+                        currentUserProp={this.props.currentUserProp}
+                        getNewerPosts={this.getPostsNewerThen}
+                        clearUserMethod={this.props.clearUserMethod}
+                    />
+
+                    {postsList}
                 </div>
-
+           
                 <button
                     className="btn"
                     onClick={this.getPostsOlderThen}>

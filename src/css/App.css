@@ -23,14 +23,6 @@ nav li {
     padding: 20px 0;
 }
 
-.container {
-    margin: 1.5em auto 0;
-    min-width: 250px;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-}
-
 @media all and (min-width: 992px) {
     .App-header {
         justify-content: flex-end;
