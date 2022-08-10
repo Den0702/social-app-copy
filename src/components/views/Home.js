@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import '../../css/Home.css';
 import Post from '../Post';
 import PostAdd from '../PostAdd';
-import Recommendations from '../Recommendations';
+import FollowRecommendations from '../FollowRecommendations';
 
 class Home extends Component {
     constructor(props) {
@@ -14,7 +14,6 @@ class Home extends Component {
         this.state = {
             postsList: [],
         }
-        console.log(this.state.postsList);
     }
 
     getPostsLatest = () => {
@@ -92,9 +91,13 @@ class Home extends Component {
 
     //ta metoda uruchamia sie przy pierwszym zaladowaniu komponentu
     componentDidMount() {
-        if (this.props.currentUserProp) {
+        console.log('Home mounted')
+        /* if (this.props.currentUserProp) {
             this.props.tokenCheckMethod();
-        }
+        } */
+        //zapytanie w getPostsLatest uruchomiloby sie rownolegle w stosunku do zapytania idacego z poziomu tockenCheckMethod
+        //bo to sa oba zapytania asynchroniczne. Wiec powyzszy if nie jest tu pomocny, poniewaz zapytanie z getPostLatest pojdzie w kazdym wypadku.
+        //Pasuje wiec tylko zostawic sprawdzenie tokena z poziomu App
         this.getPostsLatest();
     }
 
@@ -110,6 +113,7 @@ class Home extends Component {
                     currentUserProp={this.props.currentUserProp}
                     clearUserMethod={this.props.clearUserMethod}
                     postsList={this.state.postsList}
+                    getPostsLatest={this.getPostsLatest}
                     setPosts={this.setPosts}
                 />
             )
@@ -117,17 +121,17 @@ class Home extends Component {
 
         return (
             <section className="home">
-                <aside className="sm">
-                    {
-                        this.props.currentUserProp &&
-                        <Recommendations
-                            clearUserMethod={this.props.clearUserMethod}
-                            currentUserProp={this.props.currentUserProp}
-                        />
-                    }
-                </aside>
-
                 <div className="container">
+                    <aside className="sm">
+                        {
+                            this.props.currentUserProp &&
+                            <FollowRecommendations
+                                clearUserMethod={this.props.clearUserMethod}
+                                currentUserProp={this.props.currentUserProp}
+                                getPostsLatest={this.getPostsLatest}
+                            />
+                        }
+                    </aside>
                     <PostAdd
                         currentUserProp={this.props.currentUserProp}
                         getNewerPosts={this.getPostsNewerThen}

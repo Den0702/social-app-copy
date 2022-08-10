@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import '../css/PostAdd.css';
 import axios from "axios";
 
 class PostAdd extends Component {

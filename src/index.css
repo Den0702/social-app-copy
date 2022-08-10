@@ -25,6 +25,22 @@ section {
     margin: 20px 0;
 }
 
+.container {
+    margin: 1.5em auto 0;
+    min-width: 310px;
+    max-width: 550px;
+    padding: 0 5px;
+}
+
+.input-item {
+    width: 100%;
+    border: 1.5px solid white;
+    background-color: inherit;
+    padding: 3px 7px;
+    margin: 6px 0 6px;
+    color: #fff;
+}
+
 .btn {
     border-radius: 5px;
     padding: 5px 10px;
@@ -69,6 +85,19 @@ a {
 
 span {
     margin: 0 8px;
+}
+
+.btn.yes, .btn.no {
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.btn.yes {
+    background-color: hsl(89, 87%, 75%);
+}
+
+.btn.no {
+    background-color: hsl(0, 87%, 75%);
 }
 
 @media all and (min-width: 480px) {

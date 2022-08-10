@@ -1,39 +1,37 @@
 .sign-up, .login {
-    background-color: #1ba4ce;
     color: #fff;
 }
 
 .signup-form, .login-form {
     text-align: left;
     padding: 80px 40px;
+    max-width: 350px;
+    margin: auto;
 }
 /* Nie działa
 label {
     text-align: left;
 } */
 
-.user-post-message textarea {
-	width: 80%;
-	border-radius: 7px;
-	background-color: #787783;
-	border: 0;
-	padding: 10px;
-	color: #fff;
-}
-
-.user-post-message textarea:focus {
-    outline: 1px solid cornflowerblue;
-}
-
-.input-item {
-    width: 100%;
-    border: 1.5px solid white;
-    background-color: #1ba4ce;
-    padding: 3px 7px;
-    margin: 6px 0 6px;
-}
 
 .error {
     border-bottom: 1.7px solid red;
 }
 
+.clientErrorMessage {
+    margin-top: 14px;
+}
+
+.clientErrorMessage::before{
+    content: '- '
+}
+
+@media all and (min-width: 800px) {
+    .signup-form {
+        max-width: 500px;
+    }
+
+    .input-item {
+        padding: 7px 11px;
+    }
+}

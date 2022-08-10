@@ -18,7 +18,7 @@ class App extends Component {
             currentUser: localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : null,
             isMessageVisible: true,
         }
-    }
+    } 
 
     saveCurrentUserData = (user) => {
         //alert('Save Users data!');
@@ -32,6 +32,7 @@ class App extends Component {
         if (this.state.currentUser) {
             this.isTokenValid();
         }
+        console.log('App mounted');
     }
 
     isTokenValid = () => {
@@ -52,6 +53,7 @@ class App extends Component {
         })
     }
 
+    //ta metoda jest wywoływana bezpośrednio w przypadku, gdy wywołanie metody isTokenValid nie jest niezbędne 
     clearUser = () => {
         //ten warunek sie przydaje gdy ta metoda jest wywolywana z poziomu innego komponentu
         if (this.state.currentUser) {
@@ -128,7 +130,10 @@ class App extends Component {
                             />
                         }
                     />
-                    <Route path="signup" element={<SignUp />} />
+                    <Route 
+                        path="signup" 
+                        element={<SignUp />} 
+                    />
                     <Route
                         path="login"
                         element={
@@ -139,7 +144,10 @@ class App extends Component {
                             />
                         }
                     />
-                    <Route path="*" element={<NonExisting />} />
+                    <Route 
+                        path="*" 
+                        element={<NonExisting />} 
+                    />
                 </Routes>
             </div>
         );

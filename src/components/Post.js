@@ -80,21 +80,24 @@ class Post extends Component {
             "post_id": this.props.userPost.id
         }
 
-        axios.post('https://akademia108.pl/api/social-app/post/dislike', sentData, axiosConfig)
-            .then(res => {
-                this.setState((currentState) => {
-                    return {
-                        liked: res.data.liked,
-                        message: res.data.message,
-                        likesNum: currentState.likesNum - 1
-                    }
-                })
-            },
-                error => {
-                    this.props.clearUserMethod();
-                    this.setState({ message: error.response.data.message })
+        axios.post(
+            'https://akademia108.pl/api/social-app/post/dislike',
+            sentData,
+            axiosConfig
+        ).then(res => {
+            this.setState((currentState) => {
+                return {
+                    liked: res.data.liked,
+                    message: res.data.message,
+                    likesNum: currentState.likesNum - 1
                 }
-            )
+            })
+        },
+            error => {
+                this.props.clearUserMethod();
+                this.setState({ message: error.response.data.message })
+            }
+        )
     }
 
     postDelete = () => {
@@ -110,18 +113,49 @@ class Post extends Component {
             post_id: this.props.userPost.id
         }
 
-        axios.post('https://akademia108.pl/api/social-app/post/delete', sentData, axiosConfig)
-            .then(res => {
-                //console.log(`What is going with postList? ` + this.props.postList);
+        axios.post(
+            'https://akademia108.pl/api/social-app/post/delete',
+            sentData,
+            axiosConfig
+        )
+        .then(res => {
+            //console.log(`What is going with postList? ` + this.props.postList);
 
-                return this.props.setPosts(
-                    this.props.postsList.filter((post) => {
-                        return post.id !== res.data.post_id
-                    })
-                )
-            })
-            .catch(error => console.log(error))
+            return this.props.setPosts(
+                this.props.postsList.filter((post) => {
+                    return post.id !== res.data.post_id
+                })
+            )
+        })
+        .catch(error => {
+            console.log(error)
+            this.props.clearUserMethod();
+        })
 
+    }
+
+    unfollow = (userId) => {
+        const axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.currentUserProp.jwt_token
+            }
+        }
+
+        const sentData = {
+            leader_id: userId
+        }
+
+        axios.post('https://akademia108.pl/api/social-app/follows/disfollow',
+            sentData,
+            axiosConfig
+        ).then(() => {
+            this.props.getPostsLatest()
+        }).catch(error => {
+            console.log(error);
+            this.props.clearUserMethod()//to robie kazdorazowo na przypadek wygasniecia ttl'a 
+        })
     }
 
     render() {
@@ -135,18 +169,20 @@ class Post extends Component {
                         <p className="user-name">
                             {this.props.userPost.user.username}
                         </p>
-                        <button className="btn unfollow-btn">
+                    { this.props.currentUserProp && this.props.userPost.user.username !== this.props.currentUserProp.username && (
+                        <button className="btn unfollow-btn" onClick={() => this.unfollow(this.props.userPost.id)}>
                             Unfollow
                         </button>
+                    )}
                     </div>
                 </div>
 
                 {this.props.userPost.user.username === this.props.currentUserProp?.username && (
-                    <button 
+                    <button
                         className="delete-post"
-                        onClick={ () => this.setState({ deleteModalDisplay: true }) }
+                        onClick={() => this.setState({ deleteModalDisplay: true })}
                     >
-                        <FontAwesomeIcon icon="fa-solid fa-xmark"/>{" "}
+                        <FontAwesomeIcon icon="fa-solid fa-xmark" />{" "}
                         Delete your post
                     </button>
                 )}
@@ -175,12 +211,12 @@ class Post extends Component {
                         <span>{this.state.likesNum}</span>
                     </div>
                 </div>
-                
+
                 {this.state.deleteModalDisplay && (
                     <div className="deleteConfirmation">
                         <h3>Are you sure you want to delete post?</h3>
                         <button className="btn yes" onClick={() => this.postDelete()}>Yes</button>{" "}
-                        <button className="btn no" onClick={() => this.setState({ deleteModalDisplay: false})}>No</button>
+                        <button className="btn no" onClick={() => this.setState({ deleteModalDisplay: false })}>No</button>
                     </div>
                 )}
             </div>

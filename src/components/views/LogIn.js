@@ -11,14 +11,15 @@ export default function LogIn(props) {
     const [passwd, setPasswd] = useState('');
     const [passwdEmpty, setPasswdError] = useState(false);
     
-    useEffect(() => {
+/*     useEffect(() => {
         document.body.style.backgroundColor = "#1ba4ce";
         
         //kiedy bedziemy sie przelaczac na inny komponent, to to spowoduje, ze background-color stanie sie null'em 
         return () => {
             document.body.style.backgroundColor = null;
+            console.log('Login unmount');
         }
-    }, [])
+    }, []) */
 
     function signUserIn(event) {
         event.preventDefault();
@@ -26,7 +27,7 @@ export default function LogIn(props) {
         const sentData = {
             'username': `${username}`,
             'password': `${passwd}`,
-            'ttl': 1 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
+            'ttl': 300 /* czas w minutach, po którym token uzytkownika przestanie byc wazny */
         }
 
         const axiosConfig = {
