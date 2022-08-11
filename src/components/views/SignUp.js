@@ -214,7 +214,7 @@ class SignUp extends Component {
                     <label htmlFor="passwd" className={this.state.passwdError ? 'error' : ''}>Hasło</label>
                     <input
                         onChange={this.handleUserPasswd}
-                        type="text" id="passwd"
+                        type="password" id="passwd"
                         className={`input-item ${this.state.passwdError ? 'error' : ''}`}
                     />
 

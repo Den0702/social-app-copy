@@ -52,7 +52,7 @@ export default function FollowRecommendations(props) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': 'Bearer ' + (props.currentUserProp ? props.currentUserProp.jwt_token : null)
+                'Authorization': 'Bearer ' + props.currentUserProp.jwt_token 
             }
         }
 

@@ -8,6 +8,7 @@ import SignUp from './views/SignUp';
 import Home from './views/Home';
 import NonExisting from './views/NonExisting';
 import LogIn from './views/LogIn';
+import AllFollows from './views/AllFollows';
 
 class App extends Component {
 
@@ -113,6 +114,8 @@ class App extends Component {
 
                             {!this.state.currentUser && <li> <Link to="/login">Logowanie</Link> </li>}
 
+                            {this.state.currentUser && <li> <Link to="allfollows">Subskrypcje</Link></li>}
+                            
                             {this.state.currentUser && <li> <Link to="#" onClick={(e) => this.signUserOut(e)}>Wyloguj </Link></li>}
                         </ul>
                         {this.state.isMessageVisible && this.state.logoutSuccessMessage && <p className="logout-success">{this.state.logoutSuccessMessage}</p>}
@@ -130,10 +133,7 @@ class App extends Component {
                             />
                         }
                     />
-                    <Route 
-                        path="signup" 
-                        element={<SignUp />} 
-                    />
+                    <Route path="signup" element={<SignUp />} />
                     <Route
                         path="login"
                         element={
@@ -143,6 +143,13 @@ class App extends Component {
                                 currentUserProp={this.state.currentUser}
                             />
                         }
+                    />
+                    <Route 
+                        path="allfollows" 
+                        element={
+                            <AllFollows 
+                                currentUserProp={this.state.currentUser}
+                            />} 
                     />
                     <Route 
                         path="*" 

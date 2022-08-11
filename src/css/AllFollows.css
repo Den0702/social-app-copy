@@ -1,0 +1,8 @@
+.follow {
+    display: flex;
+    justify-content: space-between;
+}
+
+.follow > span {
+    margin-left: 20px;
+}

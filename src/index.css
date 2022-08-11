@@ -106,3 +106,19 @@ span {
     }
 }
 
+input:-webkit-autofill, input:focus {
+    -webkit-text-fill-color: #2b2a33;
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+input:-moz-autofill, input:focus {
+    -moz-text-fill-color: #2b2a33;
+    -moz-box-shadow: 0 0 0px 1000px white inset;
+}
+input:-o-autofill, input:focus {
+    -o-text-fill-color: #2b2a33;
+    -o-box-shadow: 0 0 0px 1000px white inset;
+}
+input:-khtml-autofill, input:focus {
+    -khtml-text-fill-color: #2b2a33;
+    -khtml-box-shadow: 0 0 0px 1000px white inset;
+}

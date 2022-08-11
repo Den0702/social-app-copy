@@ -3,6 +3,7 @@
 }
 
 .App-header {
+    position: relative;
     background-color: #33454d;
     min-height: 10vh;
     color: white;

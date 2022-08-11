@@ -150,8 +150,9 @@ class Post extends Component {
         axios.post('https://akademia108.pl/api/social-app/follows/disfollow',
             sentData,
             axiosConfig
-        ).then(() => {
-            this.props.getPostsLatest()
+        ).then((res) => {
+            this.props.getPostsLatest();
+            console.log(res.data)
         }).catch(error => {
             console.log(error);
             this.props.clearUserMethod()//to robie kazdorazowo na przypadek wygasniecia ttl'a 
@@ -170,7 +171,7 @@ class Post extends Component {
                             {this.props.userPost.user.username}
                         </p>
                     { this.props.currentUserProp && this.props.userPost.user.username !== this.props.currentUserProp.username && (
-                        <button className="btn unfollow-btn" onClick={() => this.unfollow(this.props.userPost.id)}>
+                        <button className="btn unfollow-btn" onClick={() => this.unfollow(this.props.userPost.user.id)}>
                             Unfollow
                         </button>
                     )}
