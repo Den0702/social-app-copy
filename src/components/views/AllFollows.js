@@ -27,6 +27,31 @@ export default function AllFollows(props) {
             });
     }, [])
 
+    const unfollow = (userId) => {
+        const axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.currentUserProp.jwt_token
+            }
+        }
+
+        const sentData = {
+            leader_id: userId
+        }
+
+        axios.post('https://akademia108.pl/api/social-app/follows/disfollow',
+            sentData,
+            axiosConfig
+        ).then(res => {
+            setFollows(res.data);
+
+        }).catch(error => {
+            console.log(error);
+            this.props.clearUserMethod();
+        })
+    }
+
     const followsList = follows.map(follow => {
         return (
             <div className="follow" key={follow.id}>
@@ -36,8 +61,8 @@ export default function AllFollows(props) {
                 <span className="user-name">
                     {follow.username}
                 </span>
-                <button className="btn follow-btn" onClick={() => follow(follow.id)}>
-                    Follow
+                <button className="btn unfollow-btn" onClick={() => unfollow(follow.id)}>
+                    Unfollow
                 </button>
             </div>
         )

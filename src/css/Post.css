@@ -51,7 +51,7 @@
     font-size: 12px;
 }
 
-.follow-btn {
+.follow-btn, .unfollow-btn {
     display: block;
     border-radius: 8px;
     padding: 5px 14px;
@@ -61,12 +61,7 @@
 }
 
 .unfollow-btn {
-    display: block;
-    border-radius: 8px;
     padding: 2px 7px;
-    color: #fff;
-    background-color: #1ba4ce;
-    margin: 10px 0 5px;
     font-size: 13px;
 }
 

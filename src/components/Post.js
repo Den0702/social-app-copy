@@ -152,7 +152,7 @@ class Post extends Component {
             axiosConfig
         ).then((res) => {
             this.props.getPostsLatest();
-            console.log(res.data)
+            /* console.log(res.data) */
         }).catch(error => {
             console.log(error);
             this.props.clearUserMethod()//to robie kazdorazowo na przypadek wygasniecia ttl'a 

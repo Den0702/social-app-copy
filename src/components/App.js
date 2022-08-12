@@ -114,7 +114,7 @@ class App extends Component {
 
                             {!this.state.currentUser && <li> <Link to="/login">Logowanie</Link> </li>}
 
-                            {this.state.currentUser && <li> <Link to="allfollows">Subskrypcje</Link></li>}
+                            {this.state.currentUser && <li> <Link to="/allfollows">Subskrypcje</Link></li>}
                             
                             {this.state.currentUser && <li> <Link to="#" onClick={(e) => this.signUserOut(e)}>Wyloguj </Link></li>}
                         </ul>

@@ -11,6 +11,10 @@
     outline: 1px solid cornflowerblue;
 }
 
+.user-post-message textarea::placeholder {
+    color: #fff;
+}
+
 .add-post {
     margin-top: 40px;
 }
