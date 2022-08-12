@@ -28,14 +28,6 @@ export default function AllFollows(props) {
     }, [])
 
     const unfollow = (userId) => {
-        const axiosConfig = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + this.props.currentUserProp.jwt_token
-            }
-        }
-
         const sentData = {
             leader_id: userId
         }
@@ -44,7 +36,7 @@ export default function AllFollows(props) {
             sentData,
             axiosConfig
         ).then(res => {
-            setFollows(res.data);
+            setFollows( follows.filter(follow => follow.leader_id !== res.data.leader_id) );
 
         }).catch(error => {
             console.log(error);

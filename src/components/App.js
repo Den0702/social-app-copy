@@ -6,9 +6,9 @@ import axios from 'axios';
 /* Routes */
 import SignUp from './views/SignUp';
 import Home from './views/Home';
-import NonExisting from './views/NonExisting';
 import LogIn from './views/LogIn';
 import AllFollows from './views/AllFollows';
+import NonExisting from './views/NonExisting';
 
 class App extends Component {
 
