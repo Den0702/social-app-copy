@@ -1,25 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {BrowserRouter} from 'react-router-dom'
+import ReactDOM from "react-dom";
+import React from "react";
+import {createRoot} from 'react-dom';
 
-import './index.css';
-import './normalize.css';
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-import App from './components/App';
+function Clock(props) {
+  return (
+    <div>
+      <h1>Hello, world!</h1>
+      <h2>It is {props.date.toLocaleTimeString()}.</h2>
+    </div>
+  );
+}
 
+function tick() {
+  root.render(<Clock date={new Date()} />);
+}
 
-/* Infographics */
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
-library.add(fas, far);
-
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-  ,
-  document.getElementById('root')
-);
-
-
+setInterval(tick, 1000);
