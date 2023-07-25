@@ -1,0 +1,20 @@
+.user-post-message textarea {
+	width: 80%;
+	border-radius: 7px;
+	background-color: #787783;
+	border: 0;
+	padding: 10px;
+	color: #fff;
+}
+
+.user-post-message textarea:focus {
+    outline: 1px solid cornflowerblue;
+}
+
+.user-post-message textarea::placeholder {
+    color: #fff;
+}
+
+.add-post {
+    margin-top: 40px;
+}

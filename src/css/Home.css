@@ -1,0 +1,24 @@
+/* .home aside.lg {
+    display: none;
+}
+
+@media all and (min-width: 1080px) {
+    .home aside.sm {
+        display: none;
+    }    
+
+    .home aside.lg {
+        display: block;
+    }
+}
+ */
+
+ .btn.older {
+    color: #fff;
+    background-color: #35343b;
+ }
+
+ .btn.older:hover {
+     color: #35343b;
+     background-color: #fff;
+ }

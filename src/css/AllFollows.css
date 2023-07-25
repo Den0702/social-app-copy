@@ -1,0 +1,31 @@
+.follow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    background-color: #42414d;
+    border-radius: 6px;
+    padding: 20px;
+    align-items: center;
+}
+
+.follow .unfollow-btn {
+    margin: 0;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.follow .avatar-holder {
+    display: flex;
+    align-items: center;
+    max-width: 70px;
+}
+
+.follow .user-name {
+    margin-left: 15px;
+    font-size: large;
+}
+
+
+/* .follow > span {
+    margin-left: 20px;
+} */
