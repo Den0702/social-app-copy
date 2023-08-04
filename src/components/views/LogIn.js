@@ -31,15 +31,12 @@ export default function LogIn(props) {
       if (Array.isArray(resObjectFieldValue)) {
 
         if (Object.entries(res.data).length === 2) {
-          setpasswdErr('error');
-          setUsernameErr('error');
           setPasswdErrMessage(res.data.password[0]);
           setEmptyUsernameMessage(res.data.username[0]);
 
         } else {
 
           if (Object.keys(res.data)[0] === 'password') {
-            setpasswdErr('error');
             setPasswdErrMessage(res.data.password[0]);
 
             if (usernameErr) {
@@ -48,7 +45,6 @@ export default function LogIn(props) {
             }
 
           } else {
-            setUsernameErr('error');
             setEmptyUsernameMessage(res.data.username[0]);
 
             if (passwdErr) {
