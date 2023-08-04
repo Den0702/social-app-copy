@@ -129,7 +129,7 @@ class Post extends Component {
                     </div>
                     <div className="user-info">
                         <p className="user-name">
-                            {this.props.userPost.user.username.slice()}
+                            {this.props.userPost.user.username}
                         </p>
                     { this.props.currentUserProp && this.props.userPost.user.username !== this.props.currentUserProp.username && (
                         <button className="btn unfollow-btn" onClick={() => this.unfollow(this.props.userPost.user.id)}>

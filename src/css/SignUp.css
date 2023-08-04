@@ -13,11 +13,6 @@ label {
     text-align: left;
 } */
 
-
-.error {
-    border-bottom: 1.7px solid red;
-}
-
 .clientErrorMessage {
     margin-top: 14px;
 }

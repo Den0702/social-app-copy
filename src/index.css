@@ -108,6 +108,22 @@ span {
     background-color: hsl(0, 87%, 75%);
 }
 
+.error {
+  color: hsl(0, 100%, 40%);
+}
+
+.message {
+  font-size: 15px;
+}
+
+.success {
+   color: hsl(120, 100%, 40%);
+}
+
+.error-underline {
+  border-bottom: 1.7px solid hsl(0, 100%, 40%);;
+}
+
 @media all and (min-width: 480px) {
     a {
         font-weight: 600;

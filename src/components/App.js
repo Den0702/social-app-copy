@@ -78,7 +78,7 @@ class App extends Component {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + (this.state.currentUser ? this.state.currentUser.jwt_token : null);
         axios.defaults.headers.post['Content-Type'] = 'application/json';
         
-        if (!this.state.currentUser) {
+        if (this.state.logoutErrorMessage && !this.state.currentUser) {
           this.setState(() => {
             return {
               logoutErrorMessage: '',

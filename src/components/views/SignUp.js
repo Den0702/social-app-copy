@@ -190,7 +190,7 @@ class SignUp extends Component {
                     <input
                         onChange={this.handleUserLogin}
                         type="text" id="login"
-                        className={`input-item ${this.state.loginError ? 'error' : ''}`}
+                        className={`input-item ${this.state.loginError ? 'error-underline' : ''}`}
                     />
 
                     <label htmlFor="email" className={this.state.emailError ? 'error' : ''}>Adres email</label>
@@ -198,28 +198,28 @@ class SignUp extends Component {
                         onChange={this.handleUserEmail}
                         type="email"
                         id="email"
-                        className={`input-item ${this.state.emailError ? 'error' : ''}`}
+                        className={`input-item ${this.state.emailError ? 'error-underline' : ''}`}
                     />
 
                     <label htmlFor="passwd" className={this.state.passwdError ? 'error' : ''}>Hasło</label>
                     <input
                         onChange={this.handleUserPasswd}
                         type="password" id="passwd"
-                        className={`input-item ${this.state.passwdError ? 'error' : ''}`}
+                        className={`input-item ${this.state.passwdError ? 'error-underline' : ''}`}
                     />
 
                     <label htmlFor="confirm-passwd" className={this.state.confirmPasswdError ? 'error' : ''}>Potwierdzenie hasła</label>
                     <input
                         onChange={this.handleConfirmPasswd}
                         type="password" id="confirm-passwd"
-                        className={`input-item ${this.state.confirmPasswdError ? 'error' : ''}`}
+                        className={`input-item ${this.state.confirmPasswdError ? 'error-underline' : ''}`}
                     />
 
-                    {!(this.state.loginError === '') && <p className='clientErrorMessage'>{this.state.loginError}</p>}
-                    {!(this.state.emailError === '') && <p className='clientErrorMessage'>{this.state.emailError}</p>}
-                    {!(this.state.passwdError === '') && <p className='clientErrorMessage'>{this.state.passwdError}</p>}
-                    {!(this.state.confirmPasswdError === '') && <p className='clientErrorMessage'>{this.state.confirmPasswdError}</p>}
-                    {this.state.response !== '' && <p className="serverResponse">{this.state.response}</p>}
+                    {!(this.state.loginError === '') && <p className='clientErrorMessage message'>{this.state.loginError}</p>}
+                    {!(this.state.emailError === '') && <p className='clientErrorMessage message'>{this.state.emailError}</p>}
+                    {!(this.state.passwdError === '') && <p className='clientErrorMessage message'>{this.state.passwdError}</p>}
+                    {!(this.state.confirmPasswdError === '') && <p className='clientErrorMessage message'>{this.state.confirmPasswdError}</p>}
+                    {this.state.response !== '' && <p className="serverResponse message">{this.state.response}</p>}
 
                     {this.state.signUpDone ?
                         <Link to="/login" className="btn login-redirect">Przejdź do logowania</Link>
